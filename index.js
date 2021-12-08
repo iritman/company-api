@@ -16,5 +16,5 @@ app.get("/", (req, res) => {
 // ERROR Middleware
 app.use(error);
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3031;
 app.listen(port, () => winston.info(`Listening on port ${port}`));
