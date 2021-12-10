@@ -27,43 +27,16 @@ router.get("/accessibleModules/:categoryID", auth, async (req, res) => {
   res.send(result);
 });
 
-// router.post("/search", auth, async (req, res) => {
-//   const { searchText } = req.body;
-//   const { MemberID } = req.user;
+router.get("/accessiblePages/:moduleID", auth, async (req, res) => {
+  const { MemberID } = req.user;
 
-//   let result = await selectQuery(
-//     `EXEC EduAPI.SearchClassTypes ${MemberID}, N'${searchText}'`
-//   );
+  let result = await selectQuery(
+    `EXEC AppApi.GetMemberAccessiblePages ${MemberID}, ${req.params.moduleID}`
+  );
 
-//   res.send(result.recordset);
-// });
+  result = result.recordset;
 
-// router.post("/", auth, async (req, res) => {
-//   const { MemberID } = req.user;
-
-//   let result = await selectQuery(
-//     `EXEC EduAPI.SaveClassType ${MemberID}, N'${JSON.stringify(req.body)}'`
-//   );
-
-//   result = result.recordset[0];
-
-//   if (result.Error) return res.status(400).send(result);
-
-//   res.send(result);
-// });
-
-// router.delete("/:recordID", auth, async (req, res) => {
-//   const { MemberID } = req.user;
-
-//   let result = await selectQuery(
-//     `EXEC EduAPI.DeleteClassType ${MemberID}, ${req.params.recordID}`
-//   );
-
-//   result = result.recordset[0];
-
-//   if (result.Error) return res.status(400).send(result);
-
-//   res.send(result);
-// });
+  res.send(result);
+});
 
 module.exports = router;
