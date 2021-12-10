@@ -7,7 +7,7 @@ router.get("/accessibleModuleCategories", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppApi.GetMemberAccessibleModuleCategories ${MemberID}`
+    `EXEC AppAPI.GetMemberAccessibleModuleCategories ${MemberID}`
   );
 
   result = result.recordset;
@@ -19,7 +19,7 @@ router.get("/accessibleModules/:categoryID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppApi.GetMemberAccessibleModules ${MemberID}, ${req.params.categoryID}`
+    `EXEC AppAPI.GetMemberAccessibleModules ${MemberID}, ${req.params.categoryID}`
   );
 
   result = result.recordset;
@@ -31,7 +31,7 @@ router.get("/accessiblePages/:moduleID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppApi.GetMemberAccessiblePages ${MemberID}, ${req.params.moduleID}`
+    `EXEC AppAPI.GetMemberAccessiblePages ${MemberID}, ${req.params.moduleID}`
   );
 
   result = result.recordset;
