@@ -5,6 +5,8 @@ const accesses = require("../routers/global/accesses");
 //------
 const provinces = require("../routers/org/provinces");
 const cities = require("../routers/org/cities");
+const roles = require("../routers/org/roles");
+const departments = require("../routers/org/departments");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -16,6 +18,8 @@ module.exports = function (app) {
   //------
   app.use("/api/org/provinces", provinces);
   app.use("/api/org/cities", cities);
+  app.use("/api/org/roles", roles);
+  app.use("/api/org/departments", departments);
   //------
   let dir = "./uploaded-files/";
   app.use("/static/", express.static(dir));
