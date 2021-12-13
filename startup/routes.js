@@ -7,6 +7,7 @@ const provinces = require("../routers/org/provinces");
 const cities = require("../routers/org/cities");
 const roles = require("../routers/org/roles");
 const departments = require("../routers/org/departments");
+const companies = require("../routers/org/companies");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -20,6 +21,7 @@ module.exports = function (app) {
   app.use("/api/org/cities", cities);
   app.use("/api/org/roles", roles);
   app.use("/api/org/departments", departments);
+  app.use("/api/org/companies", companies);
   //------
   let dir = "./uploaded-files/";
   app.use("/static/", express.static(dir));
