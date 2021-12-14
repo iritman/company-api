@@ -13,6 +13,18 @@ router.get("/", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/cities/:provinceID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC OrgAPI.GetCitiesByProvinceID ${MemberID}, ${req.params.provinceID}`
+  );
+
+  result = result.recordset;
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { searchText } = req.body;
   const { MemberID } = req.user;
