@@ -9,6 +9,7 @@ const roles = require("../routers/org/roles");
 const departments = require("../routers/org/departments");
 const companies = require("../routers/org/companies");
 const members = require("../routers/org/members");
+const employees = require("../routers/org/employees");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -24,6 +25,7 @@ module.exports = function (app) {
   app.use("/api/org/departments", departments);
   app.use("/api/org/companies", companies);
   app.use("/api/org/members", members);
+  app.use("/api/org/employees", employees);
   //------
   let dir = "./uploaded-files/";
   app.use("/static/", express.static(dir));

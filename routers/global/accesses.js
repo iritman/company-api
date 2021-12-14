@@ -17,4 +17,19 @@ router.post("/", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/search-members", auth, async (req, res) => {
+  const { MemberID } = req.user;
+  const { pageName, searchText } = req.body;
+
+  console.log(req.body);
+
+  let result = await selectQuery(
+    `EXEC OrgAPI.SearchMembersAsParams ${MemberID}, N'${pageName}', N'${searchText}'`
+  );
+
+  result = result.recordset;
+
+  res.send(result);
+});
+
 module.exports = router;
