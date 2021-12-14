@@ -13,6 +13,18 @@ router.get("/", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/agents/:companyID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC OrgAPI.GetCompanyAgentsByCompanyID ${MemberID}, ${req.params.companyID}`
+  );
+
+  result = result.recordset;
+
+  res.send(result);
+});
+
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
