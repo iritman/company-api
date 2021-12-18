@@ -3,6 +3,16 @@ const auth = require("../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../startup/db");
 
+router.get("/params", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(`EXEC OrgAPI.GetCompanyAgentsParams ${MemberID}`);
+
+  result = result.recordset;
+
+  res.send(result);
+});
+
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -12,6 +22,8 @@ router.get("/", auth, async (req, res) => {
 
   res.send(result);
 });
+
+
 
 router.post("/search", auth, async (req, res) => {
   const { searchText } = req.body;

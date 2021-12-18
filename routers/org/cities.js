@@ -37,8 +37,6 @@ router.post("/search", auth, async (req, res) => {
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  console.log(req.body);
-
   let result = await selectQuery(
     `EXEC OrgAPI.SaveCity ${MemberID}, N'${JSON.stringify(req.body)}'`
   );

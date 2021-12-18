@@ -6,8 +6,6 @@ const { selectQuery } = require("../../startup/db");
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  console.log(`EXEC OrgAPI.GetAllMembers ${MemberID}`);
-
   let result = await selectQuery(`EXEC OrgAPI.GetAllMembers ${MemberID}`);
 
   result = result.recordset;
