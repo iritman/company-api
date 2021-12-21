@@ -2,6 +2,8 @@ const express = require("express");
 const auth = require("../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../startup/db");
+const fs = require("fs");
+const path = require("path");
 
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
@@ -40,6 +42,27 @@ router.post("/search", auth, async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
+
+  const { MemberID: save_member_id, PicFileName } = req.body;
+
+  if (save_member_id !== 0) {
+    const data = await selectQuery(
+      `EXEC OrgAPI.GetMemberPicFileName ${MemberID}, ${save_member_id}`
+    );
+
+    const currentPicFileName = data.recordset[0].PicFileName;
+    if (currentPicFileName.length > 0 && PicFileName.length === 0) {
+      // Remove user profile image
+
+      const fileDir = `./uploaded-files/member-profiles/${currentPicFileName}`;
+
+      if (fs.existsSync(fileDir)) {
+        try {
+          fs.unlinkSync(fileDir);
+        } catch {}
+      }
+    }
+  }
 
   let result = await selectQuery(
     `EXEC OrgAPI.SaveMember ${MemberID}, N'${JSON.stringify(req.body)}'`
