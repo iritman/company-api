@@ -1,4 +1,5 @@
 const jalaliMoment = require("jalali-moment");
+const passGenerator = require("generate-password");
 
 toNormalSqlJsonText = (data) => JSON.stringify(data).replace("'", "''");
 
@@ -79,6 +80,16 @@ colonTime = (timeTxt) => {
   return result;
 };
 
+generateRandomPassword = (passLength) => {
+  return passGenerator.generate({
+    length: passLength,
+    numbers: true,
+    lowercase: true,
+    uppercase: false,
+    symbols: false,
+  });
+};
+
 module.exports = {
   toNormalSqlJsonText,
   addFirstZero,
@@ -87,4 +98,5 @@ module.exports = {
   getCurrentPersianDateWithoutSlash,
   slashDate,
   colonTime,
+  generateRandomPassword,
 };
