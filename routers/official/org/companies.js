@@ -6,9 +6,27 @@ const { selectQuery } = require("../../startup/db");
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetAllEmployees ${MemberID}`);
+  let result = await selectQuery(`EXEC OrgAPI.GetAllCompanies ${MemberID}`);
 
   result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
+});
+
+router.get("/agents/:companyID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC OrgAPI.GetCompanyAgentsByCompanyID ${MemberID}, ${req.params.companyID}`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
 
   res.send(result);
 });
@@ -16,9 +34,11 @@ router.get("/", auth, async (req, res) => {
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetEmployeesParams ${MemberID}`);
+  let result = await selectQuery(`EXEC OrgAPI.GetCompaniesParams ${MemberID}`);
 
   result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
 
   for (const key in result) {
     result[key] = JSON.parse(result[key]);
@@ -32,17 +52,22 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SearchEmployees ${MemberID}, N'${searchText}'`
+    `EXEC OrgAPI.SearchCompanies ${MemberID}, N'${searchText}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SaveEmployee ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC OrgAPI.SaveCompany ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -56,7 +81,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.DeleteEmployee ${MemberID}, ${req.params.recordID}`
+    `EXEC OrgAPI.DeleteCompany ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];

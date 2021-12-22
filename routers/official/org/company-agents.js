@@ -6,9 +6,14 @@ const { selectQuery } = require("../../startup/db");
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetCitiesParams ${MemberID}`);
+  let result = await selectQuery(
+    `EXEC OrgAPI.GetCompanyAgentsParams ${MemberID}`
+  );
 
   result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
 
   res.send(result);
 });
@@ -16,9 +21,12 @@ router.get("/params", auth, async (req, res) => {
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetAllCities ${MemberID}`);
+  let result = await selectQuery(`EXEC OrgAPI.GetAllCompanyAgents ${MemberID}`);
 
   result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
 
   res.send(result);
 });
@@ -28,17 +36,22 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SearchCities ${MemberID}, N'${searchText}'`
+    `EXEC OrgAPI.SearchCompanyAgents ${MemberID}, N'${searchText}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SaveCity ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC OrgAPI.SaveCompanyAgent ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -52,7 +65,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.DeleteCity ${MemberID}, ${req.params.recordID}`
+    `EXEC OrgAPI.DeleteCompanyAgent ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];

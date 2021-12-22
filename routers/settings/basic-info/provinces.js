@@ -3,26 +3,30 @@ const auth = require("../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../startup/db");
 
-router.get("/params", auth, async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetDutiesParams ${MemberID}`);
+  let result = await selectQuery(`EXEC OrgAPI.GetAllProvinces ${MemberID}`);
 
-  result = result.recordset[0];
+  result = result.recordset;
 
-  for (const key in result) {
-    result[key] = JSON.parse(result[key]);
-  }
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
 
   res.send(result);
 });
 
-router.get("/", auth, async (req, res) => {
+router.get("/cities/:provinceID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetAllDuties ${MemberID}`);
+  let result = await selectQuery(
+    `EXEC OrgAPI.GetCitiesByProvinceID ${MemberID}, ${req.params.provinceID}`
+  );
 
   result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
 
   res.send(result);
 });
@@ -32,17 +36,22 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SearchDuties ${MemberID}, N'${searchText}'`
+    `EXEC OrgAPI.SearchProvinces ${MemberID}, N'${searchText}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SaveDuty ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC OrgAPI.SaveProvince ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -56,7 +65,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.DeleteDuty ${MemberID}, ${req.params.recordID}`
+    `EXEC OrgAPI.DeleteProvince ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];

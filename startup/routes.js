@@ -4,16 +4,18 @@ const filemanager = require("../routers/file-manager");
 const modules = require("../routers/global/modules");
 const accesses = require("../routers/global/accesses");
 //------
-const provinces = require("../routers/org/provinces");
-const cities = require("../routers/org/cities");
-const roles = require("../routers/org/roles");
-const departments = require("../routers/org/departments");
-const companies = require("../routers/org/companies");
-const members = require("../routers/org/members");
-const employees = require("../routers/org/employees");
-const companyAgents = require("../routers/org/company-agents");
-const dutyLevels = require("../routers/org/duty-levels");
-const duties = require("../routers/org/duties");
+const provinces = require("../routers/settings/basic-info/provinces");
+const cities = require("../routers/settings/basic-info/cities");
+//------
+const roles = require("../routers/official/org/roles");
+const departments = require("../routers/official/org/departments");
+const companies = require("../routers/official/org/companies");
+const members = require("../routers/official/org/members");
+const employees = require("../routers/official/org/employees");
+const companyAgents = require("../routers/official/org/company-agents");
+const dutyLevels = require("../routers/official/org/duty-levels");
+const duties = require("../routers/official/org/duties");
+//------
 
 module.exports = function (app) {
   app.use(express.json());
@@ -24,8 +26,9 @@ module.exports = function (app) {
   app.use("/api/global/modules", modules);
   app.use("/api/global/accesses", accesses);
   //------
-  app.use("/api/org/provinces", provinces);
-  app.use("/api/org/cities", cities);
+  app.use("/api/settings/basic-info/provinces", provinces);
+  app.use("/api/settings/basic-info/cities", cities);
+  //------
   app.use("/api/org/roles", roles);
   app.use("/api/org/departments", departments);
   app.use("/api/org/companies", companies);

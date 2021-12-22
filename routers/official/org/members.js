@@ -12,6 +12,9 @@ router.get("/", auth, async (req, res) => {
 
   result = result.recordset;
 
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
   res.send(result);
 });
 
@@ -21,6 +24,8 @@ router.get("/params", auth, async (req, res) => {
   let result = await selectQuery(`EXEC OrgAPI.GetMembersParams ${MemberID}`);
 
   result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
 
   for (const key in result) {
     result[key] = JSON.parse(result[key]);
@@ -37,7 +42,12 @@ router.post("/search", auth, async (req, res) => {
     `EXEC OrgAPI.SearchMembers ${MemberID}, N'${searchText}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {

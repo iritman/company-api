@@ -6,21 +6,27 @@ const { selectQuery } = require("../../startup/db");
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetAllProvinces ${MemberID}`);
+  let result = await selectQuery(`EXEC OrgAPI.GetAllDepartments ${MemberID}`);
 
   result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
 
   res.send(result);
 });
 
-router.get("/cities/:provinceID", auth, async (req, res) => {
+router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.GetCitiesByProvinceID ${MemberID}, ${req.params.provinceID}`
+    `EXEC OrgAPI.GetDepartmentsParams ${MemberID}`
   );
 
   result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
 
   res.send(result);
 });
@@ -30,17 +36,22 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SearchProvinces ${MemberID}, N'${searchText}'`
+    `EXEC OrgAPI.SearchDepartments ${MemberID}, N'${searchText}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SaveProvince ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC OrgAPI.SaveDepartment ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -54,7 +65,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.DeleteProvince ${MemberID}, ${req.params.recordID}`
+    `EXEC OrgAPI.DeleteDepartment ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
