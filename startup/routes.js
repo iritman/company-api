@@ -29,14 +29,14 @@ module.exports = function (app) {
   app.use("/api/settings/basic-info/provinces", provinces);
   app.use("/api/settings/basic-info/cities", cities);
   //------
-  app.use("/api/org/roles", roles);
-  app.use("/api/org/departments", departments);
-  app.use("/api/org/companies", companies);
-  app.use("/api/org/members", members);
-  app.use("/api/org/employees", employees);
-  app.use("/api/org/company-agents", companyAgents);
-  app.use("/api/org/duty-levels", dutyLevels);
-  app.use("/api/org/duties", duties);
+  app.use("/api/official/org/roles", roles);
+  app.use("/api/official/org/departments", departments);
+  app.use("/api/official/org/companies", companies);
+  app.use("/api/official/org/members", members);
+  app.use("/api/official/org/employees", employees);
+  app.use("/api/official/org/company-agents", companyAgents);
+  app.use("/api/official/org/duty-levels", dutyLevels);
+  app.use("/api/official/org/duties", duties);
   //------
   let dir = "./uploaded-files/";
   app.use("/static/", express.static(dir));
