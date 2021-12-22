@@ -1,7 +1,7 @@
 const express = require("express");
-const auth = require("../../middlewares/auth");
+const auth = require("../../../middlewares/auth");
 const router = express.Router();
-const { selectQuery } = require("../../startup/db");
+const { selectQuery } = require("../../../startup/db");
 
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
