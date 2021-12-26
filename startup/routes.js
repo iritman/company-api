@@ -16,6 +16,8 @@ const companyAgents = require("../routers/official/org/company-agents");
 const dutyLevels = require("../routers/official/org/duty-levels");
 const duties = require("../routers/official/org/duties");
 //------
+const securityGuards = require("../routers/settings/timex-settings/security-guards");
+//------
 
 module.exports = function (app) {
   app.use(express.json());
@@ -28,6 +30,8 @@ module.exports = function (app) {
   //------
   app.use("/api/settings/basic-info/provinces", provinces);
   app.use("/api/settings/basic-info/cities", cities);
+  //------
+  app.use("/api/settings/timex/security-guards", securityGuards);
   //------
   app.use("/api/official/org/roles", roles);
   app.use("/api/official/org/departments", departments);
