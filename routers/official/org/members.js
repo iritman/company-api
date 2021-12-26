@@ -96,6 +96,18 @@ router.delete("/:recordID", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  if (result.PicFileName.length > 0) {
+    // Remove user profile image
+
+    const fileDir = `./uploaded-files/member-profiles/${result.PicFileName}`;
+
+    if (fs.existsSync(fileDir)) {
+      try {
+        fs.unlinkSync(fileDir);
+      } catch {}
+    }
+  }
+
   res.send(result);
 });
 
