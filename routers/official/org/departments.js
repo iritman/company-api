@@ -13,6 +13,10 @@ router.get("/", auth, async (req, res) => {
   if (result.length === 1 && result[0].Error)
     return res.status(400).send(result[0]);
 
+  result.forEach((row) => {
+    if (row.Manager) row.Manager = JSON.parse(row.Manager);
+  });
+
   res.send(result);
 });
 
@@ -21,6 +25,21 @@ router.get("/params", auth, async (req, res) => {
 
   let result = await selectQuery(
     `EXEC OrgAPI.GetDepartmentsParams ${MemberID}`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
+});
+
+router.get("/employees/:departmentID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC OrgAPI.GetDepartmentEmployees ${MemberID}, ${req.params.departmentID}`
   );
 
   result = result.recordset;
