@@ -22,8 +22,8 @@ router.post("/", async (req, res) => {
   const token = jwt.sign(
     {
       MemberID: member.MemberID,
-      FirstName: member.FirstNameFa,
-      LastName: member.LastNameFa,
+      FirstName: member.FirstName,
+      LastName: member.LastName,
     },
     config.get("jwtPrivateKey")
   );
