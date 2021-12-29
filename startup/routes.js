@@ -7,6 +7,8 @@ const accesses = require("../routers/global/accesses");
 const provinces = require("../routers/settings/basic-info/provinces");
 const cities = require("../routers/settings/basic-info/cities");
 //------
+const pageAccesses = require("../routers/settings/accesses/page-accesses");
+//------
 const roles = require("../routers/official/org/roles");
 const departments = require("../routers/official/org/departments");
 const companies = require("../routers/official/org/companies");
@@ -33,6 +35,8 @@ module.exports = function (app) {
   //------
   app.use("/api/settings/basic-info/provinces", provinces);
   app.use("/api/settings/basic-info/cities", cities);
+  //------
+  app.use("/api/settings/accesses/page-accesses", pageAccesses);
   //------
   app.use("/api/settings/timex/security-guards", securityGuards);
   app.use("/api/settings/timex/vacation-types", vacationTypes);
