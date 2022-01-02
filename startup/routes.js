@@ -16,7 +16,8 @@ const members = require("../routers/settings/org/members");
 const employees = require("../routers/settings/org/employees");
 const companyAgents = require("../routers/settings/org/company-agents");
 const dutyLevels = require("../routers/settings/org/duty-levels");
-const duties = require("../routers/settings/org/duties");
+const personalDuties = require("../routers/settings/org/personal-duties");
+const roleDuties = require("../routers/settings/org/role-duties");
 //------
 const securityGuards = require("../routers/settings/timex/security-guards");
 const vacationTypes = require("../routers/settings/timex/vacation-types");
@@ -50,7 +51,8 @@ module.exports = function (app) {
   app.use("/api/settings/org/employees", employees);
   app.use("/api/settings/org/company-agents", companyAgents);
   app.use("/api/settings/org/duty-levels", dutyLevels);
-  app.use("/api/settings/org/duties", duties);
+  app.use("/api/settings/org/personal-duties", personalDuties);
+  app.use("/api/settings/org/role-duties", roleDuties);
   //------
   let dir = "./uploaded-files/";
   app.use("/static/", express.static(dir));

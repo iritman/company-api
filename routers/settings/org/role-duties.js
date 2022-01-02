@@ -6,7 +6,7 @@ const { selectQuery } = require("../../../startup/db");
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetDutiesParams ${MemberID}`);
+  let result = await selectQuery(`EXEC OrgAPI.GetRoleDutiesParams ${MemberID}`);
 
   result = result.recordset[0];
 
@@ -22,7 +22,7 @@ router.get("/params", auth, async (req, res) => {
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetAllDuties ${MemberID}`);
+  let result = await selectQuery(`EXEC OrgAPI.GetAllRoleDuties ${MemberID}`);
 
   result = result.recordset;
 
@@ -37,7 +37,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SearchDuties ${MemberID}, N'${searchText}'`
+    `EXEC OrgAPI.SearchRoleDuties ${MemberID}, N'${searchText}'`
   );
 
   result = result.recordset;
@@ -52,7 +52,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SaveDuty ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC OrgAPI.SaveRoleDuty ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -66,7 +66,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.DeleteDuty ${MemberID}, ${req.params.recordID}`
+    `EXEC OrgAPI.DeleteRoleDuty ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
