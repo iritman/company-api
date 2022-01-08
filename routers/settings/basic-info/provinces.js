@@ -6,7 +6,7 @@ const { selectQuery } = require("../../../startup/db");
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC OrgAPI.GetAllProvinces ${MemberID}`);
+  let result = await selectQuery(`EXEC AppAPI.GetAllProvinces ${MemberID}`);
 
   result = result.recordset;
 
@@ -20,7 +20,7 @@ router.get("/cities/:provinceID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.GetCitiesByProvinceID ${MemberID}, ${req.params.provinceID}`
+    `EXEC AppAPI.GetCitiesByProvinceID ${MemberID}, ${req.params.provinceID}`
   );
 
   result = result.recordset;
@@ -36,7 +36,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SearchProvinces ${MemberID}, N'${searchText}'`
+    `EXEC AppAPI.SearchProvinces ${MemberID}, N'${searchText}'`
   );
 
   result = result.recordset;
@@ -51,7 +51,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SaveProvince ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC AppAPI.SaveProvince ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -65,7 +65,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.DeleteProvince ${MemberID}, ${req.params.recordID}`
+    `EXEC AppAPI.DeleteProvince ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];

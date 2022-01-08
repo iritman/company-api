@@ -1,5 +1,11 @@
 const provinces = require("../routers/settings/basic-info/provinces");
 const cities = require("../routers/settings/basic-info/cities");
+const eduLevels = require("../routers/settings/basic-info/edu-levels");
+const eduFields = require("../routers/settings/basic-info/edu-fields");
+const universities = require("../routers/settings/basic-info/universities");
+const employmentTypes = require("../routers/settings/basic-info/employment-types");
+const employmentStatuses = require("../routers/settings/basic-info/employment-statuses");
+const workPlaces = require("../routers/settings/basic-info/work-places");
 //------
 const pageAccesses = require("../routers/settings/accesses/page-accesses");
 //------
@@ -25,6 +31,12 @@ const employeeShifts = require("../routers/settings/timex/employee-shifts");
 module.exports = function (app) {
   app.use("/api/settings/basic-info/provinces", provinces);
   app.use("/api/settings/basic-info/cities", cities);
+  app.use("/api/settings/basic-info/edu-levels", eduLevels);
+  app.use("/api/settings/basic-info/edu-fields", eduFields);
+  app.use("/api/settings/basic-info/universities", universities);
+  app.use("/api/settings/basic-info/employment-types", employmentTypes);
+  app.use("/api/settings/basic-info/employment-statuses", employmentStatuses);
+  app.use("/api/settings/basic-info/work-places", workPlaces);
   //------
   app.use("/api/settings/accesses/page-accesses", pageAccesses);
   //------

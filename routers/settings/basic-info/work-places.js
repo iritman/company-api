@@ -3,28 +3,12 @@ const auth = require("../../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../../startup/db");
 
-router.get("/params", auth, async (req, res) => {
-  const { MemberID } = req.user;
-
-  let result = await selectQuery(`EXEC AppAPI.GetCitiesParams ${MemberID}`);
-
-  result = result.recordset;
-
-  if (result.length === 1 && result[0].Error)
-    return res.status(400).send(result[0]);
-
-  res.send(result);
-});
-
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC AppAPI.GetAllCities ${MemberID}`);
+  let result = await selectQuery(`EXEC AppAPI.GetAllWorkPlaces ${MemberID}`);
 
   result = result.recordset;
-
-  if (result.length === 1 && result[0].Error)
-    return res.status(400).send(result[0]);
 
   res.send(result);
 });
@@ -34,7 +18,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppAPI.SearchCities ${MemberID}, N'${searchText}'`
+    `EXEC AppAPI.SearchWorkPlaces ${MemberID}, N'${searchText}'`
   );
 
   res.send(result.recordset);
@@ -44,7 +28,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppAPI.SaveCity ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC AppAPI.SaveWorkPlace ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -58,7 +42,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppAPI.DeleteCity ${MemberID}, ${req.params.recordID}`
+    `EXEC AppAPI.DeleteWorkPlace ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
