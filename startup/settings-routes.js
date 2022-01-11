@@ -26,6 +26,7 @@ const holidays = require("../routers/settings/timex/holidays");
 const workShifts = require("../routers/settings/timex/work-shifts");
 const groupShifts = require("../routers/settings/timex/group-shifts");
 const employeeShifts = require("../routers/settings/timex/employee-shifts");
+const regedCards = require("../routers/settings/timex/reged-cards");
 //------
 
 module.exports = function (app) {
@@ -47,6 +48,7 @@ module.exports = function (app) {
   app.use("/api/settings/timex/work-shifts", workShifts);
   app.use("/api/settings/timex/group-shifts", groupShifts);
   app.use("/api/settings/timex/employee-shifts", employeeShifts);
+  app.use("/api/settings/timex/reged-cards", regedCards);
   //------
   app.use("/api/settings/org/roles", roles);
   app.use("/api/settings/org/departments", departments);
