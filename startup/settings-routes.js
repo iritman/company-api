@@ -20,6 +20,7 @@ const personalDuties = require("../routers/settings/org/personal-duties");
 const roleDuties = require("../routers/settings/org/role-duties");
 //------
 const securityGuards = require("../routers/settings/timex/security-guards");
+const securityGuardRegedCards = require("../routers/settings/timex/security-guard-reged-cards");
 const vacationTypes = require("../routers/settings/timex/vacation-types");
 const missionTypes = require("../routers/settings/timex/mission-types");
 const holidays = require("../routers/settings/timex/holidays");
@@ -42,6 +43,10 @@ module.exports = function (app) {
   app.use("/api/settings/accesses/page-accesses", pageAccesses);
   //------
   app.use("/api/settings/timex/security-guards", securityGuards);
+  app.use(
+    "/api/settings/timex/security-guard-reged-cards",
+    securityGuardRegedCards
+  );
   app.use("/api/settings/timex/vacation-types", vacationTypes);
   app.use("/api/settings/timex/mission-types", missionTypes);
   app.use("/api/settings/timex/holidays", holidays);
