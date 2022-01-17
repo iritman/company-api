@@ -15,7 +15,6 @@ router.get("/params", auth, async (req, res) => {
   if (result.Error) return res.status(400).send(result);
 
   for (const key in result) {
-    console.log(key, result[key]);
     result[key] = JSON.parse(result[key]);
   }
 
