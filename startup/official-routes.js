@@ -11,6 +11,7 @@ const userMembersRegedCards = require("./../routers/official/timex/user-members-
 const userMembersWorkShifts = require("./../routers/official/timex/user-members-work-shifts");
 const userMembersVacationsCheckManager = require("./../routers/official/timex/user-members-vacations-cehck-manager");
 const userMembersVacationsCheckOfficial = require("./../routers/official/timex/user-members-vacations-check-official");
+const userMembersVacations = require("./../routers/official/timex/user-members-vacations");
 //---
 
 module.exports = function (app) {
@@ -45,4 +46,5 @@ module.exports = function (app) {
     "/api/official/timex/user-members-new-vacations-check-official",
     userMembersVacationsCheckOfficial
   );
+  app.use("/api/official/timex/user-members-vacations", userMembersVacations);
 };
