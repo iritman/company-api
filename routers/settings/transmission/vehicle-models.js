@@ -7,7 +7,7 @@ router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TrasnmissionAPI.GetModelsParams ${MemberID}`
+    `EXEC TransmissionAPI.GetModelsParams ${MemberID}`
   );
 
   result = result.recordset[0];
