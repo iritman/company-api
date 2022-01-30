@@ -32,6 +32,8 @@ const officialExperts = require("../routers/settings/timex/official-experts");
 const vacationRequests = require("../routers/settings/timex/vacation-requests");
 const missionTargets = require("../routers/settings/timex/mission-targets");
 //------
+const vehicleTypes = require("../routers/settings/transmission/vehicle-types");
+//------
 
 module.exports = function (app) {
   app.use("/api/settings/basic-info/provinces", provinces);
@@ -44,6 +46,16 @@ module.exports = function (app) {
   app.use("/api/settings/basic-info/work-places", workPlaces);
   //------
   app.use("/api/settings/accesses/page-accesses", pageAccesses);
+  //------
+  app.use("/api/settings/org/roles", roles);
+  app.use("/api/settings/org/departments", departments);
+  app.use("/api/settings/org/companies", companies);
+  app.use("/api/settings/org/members", members);
+  app.use("/api/settings/org/employees", employees);
+  app.use("/api/settings/org/company-agents", companyAgents);
+  app.use("/api/settings/org/duty-levels", dutyLevels);
+  app.use("/api/settings/org/personal-duties", personalDuties);
+  app.use("/api/settings/org/role-duties", roleDuties);
   //------
   app.use("/api/settings/timex/security-guards", securityGuards);
   app.use(
@@ -61,13 +73,5 @@ module.exports = function (app) {
   app.use("/api/settings/timex/vacation-requests", vacationRequests);
   app.use("/api/settings/timex/mission-targets", missionTargets);
   //------
-  app.use("/api/settings/org/roles", roles);
-  app.use("/api/settings/org/departments", departments);
-  app.use("/api/settings/org/companies", companies);
-  app.use("/api/settings/org/members", members);
-  app.use("/api/settings/org/employees", employees);
-  app.use("/api/settings/org/company-agents", companyAgents);
-  app.use("/api/settings/org/duty-levels", dutyLevels);
-  app.use("/api/settings/org/personal-duties", personalDuties);
-  app.use("/api/settings/org/role-duties", roleDuties);
+  app.use("/api/settings/transmission/vehicle-types", vehicleTypes);
 };
