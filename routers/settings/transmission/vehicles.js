@@ -7,7 +7,7 @@ router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TrasnmissionAPI.GetVehiclesParams ${MemberID}`
+    `EXEC TransmissionAPI.GetVehiclesParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -25,7 +25,7 @@ router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TrasnmissionAPI.GetAllVehicles ${MemberID}`
+    `EXEC TransmissionAPI.GetAllVehicles ${MemberID}`
   );
 
   result = result.recordset;
@@ -38,7 +38,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TrasnmissionAPI.SearchVehicles ${MemberID}, N'${searchText}'`
+    `EXEC TransmissionAPI.SearchVehicles ${MemberID}, N'${searchText}'`
   );
 
   res.send(result.recordset);
@@ -48,7 +48,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TrasnmissionAPI.SaveVehicle ${MemberID}, N'${JSON.stringify(
+    `EXEC TransmissionAPI.SaveVehicle ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -64,7 +64,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TrasnmissionAPI.DeleteVehicle ${MemberID}, ${req.params.recordID}`
+    `EXEC TransmissionAPI.DeleteVehicle ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
