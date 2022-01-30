@@ -33,6 +33,7 @@ const vacationRequests = require("../routers/settings/timex/vacation-requests");
 const missionTargets = require("../routers/settings/timex/mission-targets");
 //------
 const vehicleTypes = require("../routers/settings/transmission/vehicle-types");
+const vehicleBrands = require("../routers/settings/transmission/vehicle-brands");
 //------
 
 module.exports = function (app) {
@@ -74,4 +75,5 @@ module.exports = function (app) {
   app.use("/api/settings/timex/mission-targets", missionTargets);
   //------
   app.use("/api/settings/transmission/vehicle-types", vehicleTypes);
+  app.use("/api/settings/transmission/vehicle-brands", vehicleBrands);
 };
