@@ -35,6 +35,7 @@ const missionTargets = require("../routers/settings/timex/mission-targets");
 const vehicleTypes = require("../routers/settings/transmission/vehicle-types");
 const vehicleBrands = require("../routers/settings/transmission/vehicle-brands");
 const vehicleModels = require("../routers/settings/transmission/vehicle-models");
+const vehicles = require("../routers/settings/transmission/vehicles");
 //------
 
 module.exports = function (app) {
@@ -78,4 +79,5 @@ module.exports = function (app) {
   app.use("/api/settings/transmission/vehicle-types", vehicleTypes);
   app.use("/api/settings/transmission/vehicle-brands", vehicleBrands);
   app.use("/api/settings/transmission/vehicle-models", vehicleModels);
+  app.use("/api/settings/transmission/vehicles", vehicles);
 };
