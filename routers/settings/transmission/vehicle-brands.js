@@ -7,7 +7,7 @@ router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.GetAllVehicleBrands ${MemberID}`
+    `EXEC TransmissionAPI.GetAllVehicleBrands ${MemberID}`
   );
 
   result = result.recordset;
@@ -20,7 +20,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SearchVehicleBrands ${MemberID}, N'${searchText}'`
+    `EXEC TransmissionAPI.SearchVehicleBrands ${MemberID}, N'${searchText}'`
   );
 
   res.send(result.recordset);
@@ -30,7 +30,9 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SaveVehicleBrand ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC TransmissionAPI.SaveVehicleBrand ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
   );
 
   result = result.recordset[0];
@@ -44,7 +46,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.DeleteVehicleBrand ${MemberID}, ${req.params.recordID}`
+    `EXEC TransmissionAPI.DeleteVehicleBrand ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
