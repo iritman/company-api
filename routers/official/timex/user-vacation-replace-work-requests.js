@@ -7,7 +7,7 @@ router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.GetReplaceWorkRequestParams ${MemberID}`
+    `EXEC TimexAPI.GetVacationReplaceWorkRequestParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -25,7 +25,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SearchUserReplaceWorkRequests ${MemberID}, N'${JSON.stringify(
+    `EXEC TimexAPI.SearchUserVacationReplaceWorkRequests ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -37,7 +37,7 @@ router.post("/response", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SaveUserReplaceWorkResponse ${MemberID}, N'${JSON.stringify(
+    `EXEC TimexAPI.SaveUserVacationReplaceWorkResponse ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
