@@ -13,8 +13,9 @@ const userMembersRegedCards = require("./../routers/official/timex/user-members-
 const userMembersWorkShifts = require("./../routers/official/timex/user-members-work-shifts");
 const userMembersVacationsCheckManager = require("./../routers/official/timex/user-members-vacations-cehck-manager");
 const userMembersVacationsCheckOfficial = require("./../routers/official/timex/user-members-vacations-check-official");
-const userMembersMissionsCheckManager = require("./../routers/official/timex/user-members-missions-cehck-manager");
 const userMembersVacations = require("./../routers/official/timex/user-members-vacations");
+const userMembersMissionsCheckManager = require("./../routers/official/timex/user-members-missions-cehck-manager");
+const userMembersMissionsCheckOfficial = require("./../routers/official/timex/user-members-missions-check-official");
 //---
 
 module.exports = function (app) {
@@ -54,9 +55,13 @@ module.exports = function (app) {
     "/api/official/timex/user-members-new-vacations-check-official",
     userMembersVacationsCheckOfficial
   );
+  app.use("/api/official/timex/user-members-vacations", userMembersVacations);
   app.use(
     "/api/official/timex/user-members-new-missions-check-manager",
     userMembersMissionsCheckManager
   );
-  app.use("/api/official/timex/user-members-vacations", userMembersVacations);
+  app.use(
+    "/api/official/timex/user-members-new-missions-check-official",
+    userMembersMissionsCheckOfficial
+  );
 };
