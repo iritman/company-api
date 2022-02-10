@@ -18,6 +18,8 @@ const userMembersMissionsCheckManager = require("./../routers/official/timex/use
 const userMembersMissionsCheckOfficial = require("./../routers/official/timex/user-members-missions-check-official");
 const userMembersMissions = require("./../routers/official/timex/user-members-missions");
 //---
+const userTransmissionRequests = require("./../routers/official/transmission/user-transmission-requests");
+//---
 
 module.exports = function (app) {
   app.use("/api/official/org/user-duties", userDuties);
@@ -66,4 +68,9 @@ module.exports = function (app) {
     userMembersMissionsCheckOfficial
   );
   app.use("/api/official/timex/user-members-missions", userMembersMissions);
+  //---
+  app.use(
+    "/api/official/transmission/user-transmission-requests",
+    userTransmissionRequests
+  );
 };
