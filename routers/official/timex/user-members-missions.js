@@ -30,7 +30,13 @@ router.post("/search", auth, async (req, res) => {
     )}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  result.forEach((mission) => {
+    mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
+  });
+
+  res.send(result);
 });
 
 module.exports = router;
