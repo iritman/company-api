@@ -33,7 +33,8 @@ router.post("/search", auth, async (req, res) => {
   result = result.recordset;
 
   result.forEach((mission) => {
-    mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
+    if (mission.VehicleInfo.length > 0)
+      mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
   });
 
   res.send(result);

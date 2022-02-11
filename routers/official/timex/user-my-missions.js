@@ -28,7 +28,14 @@ router.post("/search", auth, async (req, res) => {
     `EXEC TimexAPI.SearchMyMissions ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  result.forEach((mission) => {
+    if (mission.VehicleInfo.length > 0)
+      mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
+  });
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {
