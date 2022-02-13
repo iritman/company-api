@@ -33,7 +33,27 @@ router.post("/search", auth, async (req, res) => {
   result.forEach((mission) => {
     if (mission.VehicleInfo.length > 0)
       mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
+
+    mission.ReportInfo = JSON.parse(mission.ReportInfo);
   });
+
+  res.send(result);
+});
+
+router.post("/report", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TimexAPI.SaveMyMissionReport ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.ReportInfo = JSON.parse(result.ReportInfo);
 
   res.send(result);
 });
