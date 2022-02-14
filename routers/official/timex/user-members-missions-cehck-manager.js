@@ -26,6 +26,26 @@ router.get(
   }
 );
 
+router.get("/reports/new", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TimexAPI.SearchNewMissionReports ${MemberID}`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result);
+
+  result.forEach((mission) => {
+    mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
+    mission.ReportInfo = JSON.parse(mission.ReportInfo);
+  });
+
+  res.send(result);
+});
+
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -54,6 +74,24 @@ router.post("/search", auth, async (req, res) => {
   );
 
   res.send(result.recordset);
+});
+
+router.post("/report/response", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TimexAPI.SaveMissionReportRespone ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.ReportInfo = JSON.parse(result.ReportInfo);
+
+  res.send(result);
 });
 
 router.post("/response", auth, async (req, res) => {
