@@ -35,6 +35,7 @@ router.post("/search", auth, async (req, res) => {
   result.forEach((mission) => {
     if (mission.VehicleInfo.length > 0)
       mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
+    mission.ReportInfo = JSON.parse(mission.ReportInfo);
   });
 
   res.send(result);
