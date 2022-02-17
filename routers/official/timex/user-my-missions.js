@@ -21,6 +21,30 @@ router.get("/params", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/note/seen/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TimexAPI.SaveMyMissionNoteSeenDateTime ${MemberID}, ${req.params.recordID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  //------
+
+  if (result.VehicleInfo.length > 0)
+    result.VehicleInfo = JSON.parse(result.VehicleInfo);
+
+  result.ReportInfo = JSON.parse(result.ReportInfo);
+  result.Notes = JSON.parse(result.Notes);
+
+  //------
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -35,6 +59,7 @@ router.post("/search", auth, async (req, res) => {
       mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
 
     mission.ReportInfo = JSON.parse(mission.ReportInfo);
+    mission.Notes = JSON.parse(mission.Notes);
   });
 
   res.send(result);
