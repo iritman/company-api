@@ -31,6 +31,7 @@ const regedCards = require("../routers/settings/timex/reged-cards");
 const officialExperts = require("../routers/settings/timex/official-experts");
 const vacationRequests = require("../routers/settings/timex/vacation-requests");
 const missionTargets = require("../routers/settings/timex/mission-targets");
+const departmentExtraWorkCapacities = require("../routers/settings/timex/department-extra-work-capacities");
 //------
 const vehicleTypes = require("../routers/settings/transmission/vehicle-types");
 const vehicleBrands = require("../routers/settings/transmission/vehicle-brands");
@@ -75,6 +76,10 @@ module.exports = function (app) {
   app.use("/api/settings/timex/official-experts", officialExperts);
   app.use("/api/settings/timex/vacation-requests", vacationRequests);
   app.use("/api/settings/timex/mission-targets", missionTargets);
+  app.use(
+    "/api/settings/timex/department-extra-work-capacities",
+    departmentExtraWorkCapacities
+  );
   //------
   app.use("/api/settings/transmission/vehicle-types", vehicleTypes);
   app.use("/api/settings/transmission/vehicle-brands", vehicleBrands);
