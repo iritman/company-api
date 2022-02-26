@@ -20,6 +20,8 @@ const userMembersMissions = require("./../routers/official/timex/user-members-mi
 //---
 const userTransmissionRequests = require("./../routers/official/transmission/user-transmission-requests");
 //---
+const userTaskTags = require("./../routers/official/tasks/tags");
+//---
 
 module.exports = function (app) {
   app.use("/api/official/org/user-duties", userDuties);
@@ -73,4 +75,6 @@ module.exports = function (app) {
     "/api/official/transmission/user-transmission-requests",
     userTransmissionRequests
   );
+  //---
+  app.use("/api/official/tasks/user-task-tags", userTaskTags);
 };
