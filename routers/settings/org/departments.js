@@ -15,6 +15,7 @@ router.get("/", auth, async (req, res) => {
 
   result.forEach((row) => {
     if (row.Manager) row.Manager = JSON.parse(row.Manager);
+    if (row.Supervisor) row.Supervisor = JSON.parse(row.Supervisor);
   });
 
   res.send(result);
