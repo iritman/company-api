@@ -33,12 +33,13 @@ router.get("/", auth, async (req, res) => {
   res.send(result);
 });
 
-router.post("/search/:departmentID", auth, async (req, res) => {
-  const { departmentID } = req.params;
+router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SearchDepartmentExtraWorkCapacities ${MemberID}, ${departmentID}`
+    `EXEC TimexAPI.SearchDepartmentExtraWorkCapacities ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
   );
 
   res.send(result.recordset);
