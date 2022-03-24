@@ -17,6 +17,7 @@ const userMembersVacations = require("./../routers/official/timex/user-members-v
 const userMembersMissionsCheckManager = require("./../routers/official/timex/user-members-missions-cehck-manager");
 const userMembersMissionsCheckOfficial = require("./../routers/official/timex/user-members-missions-check-official");
 const userMembersMissions = require("./../routers/official/timex/user-members-missions");
+const userMembersExtraWorkRequests = require("./../routers/official/timex/user-members-extra-work-requests");
 //---
 const userTransmissionRequests = require("./../routers/official/transmission/user-transmission-requests");
 //---
@@ -71,6 +72,10 @@ module.exports = function (app) {
     userMembersMissionsCheckOfficial
   );
   app.use("/api/official/timex/user-members-missions", userMembersMissions);
+  app.use(
+    "/api/official/timex/user-members-extra-work-requests",
+    userMembersExtraWorkRequests
+  );
   //---
   app.use(
     "/api/official/transmission/user-transmission-requests",
