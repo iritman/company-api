@@ -19,6 +19,7 @@ const userMembersMissionsCheckOfficial = require("./../routers/official/timex/us
 const userMembersMissions = require("./../routers/official/timex/user-members-missions");
 const userMembersExtraWorkRequests = require("./../routers/official/timex/user-members-extra-work-requests");
 const userOfficialCheckExtraWorkRequests = require("./../routers/official/timex/user-official-check-extra-work-requests");
+const userOfficialCheckRegedCards = require("./../routers/official/timex/user-official-check-reged-cards");
 //---
 const userTransmissionRequests = require("./../routers/official/transmission/user-transmission-requests");
 //---
@@ -80,6 +81,10 @@ module.exports = function (app) {
   app.use(
     "/api/official/timex/user-official-check-extra-work-requests",
     userOfficialCheckExtraWorkRequests
+  );
+  app.use(
+    "/api/official/timex/user-official-check-reged-cards",
+    userOfficialCheckRegedCards
   );
   //---
   app.use(
