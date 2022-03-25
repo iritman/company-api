@@ -64,9 +64,6 @@ router.post("/search", auth, async (req, res) => {
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  console.log(req.body);
-  console.log("------------");
-
   let result = await selectQuery(
     `EXEC TimexAPI.SaveOfficialCheckExtraWorkRequest ${MemberID}, N'${JSON.stringify(
       req.body
