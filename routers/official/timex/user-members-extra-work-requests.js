@@ -32,6 +32,9 @@ router.post("/search", auth, async (req, res) => {
 
   result = result.recordset;
 
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
   //---
 
   result.forEach((request) => {
