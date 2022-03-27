@@ -65,8 +65,6 @@ router.post("/response", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
-  console.log(result);
-
   result.Actions = JSON.parse(result.Actions);
 
   res.send(result);
