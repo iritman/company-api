@@ -3,28 +3,15 @@ const auth = require("../../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../../startup/db");
 
-router.get(
-  "/swapables/:vacationMemberID/:swapMemberID",
-  auth,
-  async (req, res) => {
-    const { MemberID } = req.user;
-    const { vacationMemberID, swapMemberID } = req.params;
+router.get("/role", auth, async (req, res) => {
+  const { MemberID } = req.user;
 
-    let result = await selectQuery(
-      `EXEC TimexAPI.GetManagerNewVacationSwapableMembers ${MemberID}, ${vacationMemberID}, ${swapMemberID}`
-    );
+  let result = await selectQuery(`EXEC TimexAPI.GetMemberRole ${MemberID}`);
 
-    result = result.recordset[0];
+  result = result.recordset[0];
 
-    if (result.Error) return res.status(400).send(result);
-
-    for (const key in result) {
-      result[key] = JSON.parse(result[key]);
-    }
-
-    res.send(result);
-  }
-);
+  res.send(result);
+});
 
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
@@ -53,7 +40,16 @@ router.post("/search", auth, async (req, res) => {
     )}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((vacation) => {
+    vacation.Actions = JSON.parse(vacation.Actions);
+  });
+
+  res.send(result);
 });
 
 router.post("/response", auth, async (req, res) => {
@@ -68,6 +64,10 @@ router.post("/response", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  console.log(result);
+
+  result.Actions = JSON.parse(result.Actions);
 
   res.send(result);
 });
