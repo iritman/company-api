@@ -30,7 +30,16 @@ router.post("/search", auth, async (req, res) => {
     )}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((vacation) => {
+    vacation.Actions = JSON.parse(vacation.Actions);
+  });
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {
@@ -43,6 +52,8 @@ router.post("/", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  result.Actions = JSON.parse(result.Actions);
 
   res.send(result);
 });
