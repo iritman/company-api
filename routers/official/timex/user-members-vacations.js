@@ -30,7 +30,16 @@ router.post("/search", auth, async (req, res) => {
     )}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((vacation) => {
+    vacation.Actions = JSON.parse(vacation.Actions);
+  });
+
+  res.send(result);
 });
 
 module.exports = router;
