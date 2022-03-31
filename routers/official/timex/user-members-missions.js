@@ -41,6 +41,7 @@ router.post("/search", auth, async (req, res) => {
 
     mission.ReportInfo = JSON.parse(mission.ReportInfo);
     mission.Notes = JSON.parse(mission.Notes);
+    mission.Actions = JSON.parse(mission.Actions);
   });
 
   //---
@@ -67,6 +68,7 @@ router.post("/note", auth, async (req, res) => {
 
   result.ReportInfo = JSON.parse(result.ReportInfo);
   result.Notes = JSON.parse(result.Notes);
+  result.Actions = JSON.parse(result.Actions);
 
   //---
 
@@ -90,6 +92,7 @@ router.delete("/note/:recordID", auth, async (req, res) => {
 
   result.ReportInfo = JSON.parse(result.ReportInfo);
   result.Notes = JSON.parse(result.Notes);
+  result.Actions = JSON.parse(result.Actions);
 
   res.send(result);
 });
