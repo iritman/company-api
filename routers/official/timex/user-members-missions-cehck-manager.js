@@ -83,9 +83,15 @@ router.get("/reports/new", auth, async (req, res) => {
     return res.status(400).send(result);
 
   result.forEach((mission) => {
-    mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
+    if (mission.VehicleInfo.length > 0)
+      mission.VehicleInfo = JSON.parse(mission.VehicleInfo);
+
     mission.ReportInfo = JSON.parse(mission.ReportInfo);
+    mission.Notes = JSON.parse(mission.Notes);
+    mission.Actions = JSON.parse(mission.Actions);
   });
+
+  console.log();
 
   res.send(result);
 });
@@ -103,7 +109,12 @@ router.post("/report/response", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  if (result.VehicleInfo.length > 0)
+    result.VehicleInfo = JSON.parse(result.VehicleInfo);
+
   result.ReportInfo = JSON.parse(result.ReportInfo);
+  result.Notes = JSON.parse(result.Notes);
+  result.Actions = JSON.parse(result.Actions);
 
   res.send(result);
 });
