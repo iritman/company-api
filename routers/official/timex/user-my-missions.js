@@ -39,6 +39,7 @@ router.post("/note/seen/:recordID", auth, async (req, res) => {
 
   result.ReportInfo = JSON.parse(result.ReportInfo);
   result.Notes = JSON.parse(result.Notes);
+  result.Actions = JSON.parse(result.Actions);
 
   //------
 
@@ -79,7 +80,12 @@ router.post("/report", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  if (result.VehicleInfo.length > 0)
+    result.VehicleInfo = JSON.parse(result.VehicleInfo);
+
   result.ReportInfo = JSON.parse(result.ReportInfo);
+  result.Notes = JSON.parse(result.Notes);
+  result.Actions = JSON.parse(result.Actions);
 
   res.send(result);
 });
@@ -111,7 +117,12 @@ router.delete("/report/:recordID", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  if (result.VehicleInfo.length > 0)
+    result.VehicleInfo = JSON.parse(result.VehicleInfo);
+
   result.ReportInfo = JSON.parse(result.ReportInfo);
+  result.Notes = JSON.parse(result.Notes);
+  result.Actions = JSON.parse(result.Actions);
 
   res.send(result);
 });
