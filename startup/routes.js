@@ -6,6 +6,7 @@ const accesses = require("../routers/global/accesses");
 //------
 const officialRoutes = require("./official-routes");
 const settingsRoutes = require("./settings-routes");
+const dashboardRoutes = require("./dashboard-routes");
 //------
 
 module.exports = function (app) {
@@ -19,6 +20,7 @@ module.exports = function (app) {
   //------
   officialRoutes(app);
   settingsRoutes(app);
+  dashboardRoutes(app);
   //------
   let dir = "./uploaded-files/";
   app.use("/static/", express.static(dir));
