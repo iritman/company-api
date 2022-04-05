@@ -21,6 +21,20 @@ router.get("/params/response", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/new/count", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TransmissionAPI.GetNewRequestsCount ${MemberID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
