@@ -36,6 +36,7 @@ const missionTargets = require("../routers/settings/timex/mission-targets");
 const departmentExtraWorkCapacities = require("../routers/settings/timex/department-extra-work-capacities");
 const extraWorkCommandSources = require("../routers/settings/timex/extra-work-command-sources");
 const noAlternativeEmployees = require("../routers/settings/timex/no-alternative-employees");
+const vacationCardexSettings = require("../routers/settings/timex/vacation-cardex-settings");
 //------
 const vehicleTypes = require("../routers/settings/transmission/vehicle-types");
 const vehicleBrands = require("../routers/settings/transmission/vehicle-brands");
@@ -93,6 +94,10 @@ module.exports = function (app) {
   app.use(
     "/api/settings/timex/no-alternative-employees",
     noAlternativeEmployees
+  );
+  app.use(
+    "/api/settings/timex/vacation-cardex-settings",
+    vacationCardexSettings
   );
   //------
   app.use("/api/settings/transmission/vehicle-types", vehicleTypes);
