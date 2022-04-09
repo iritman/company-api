@@ -37,6 +37,7 @@ const departmentExtraWorkCapacities = require("../routers/settings/timex/departm
 const extraWorkCommandSources = require("../routers/settings/timex/extra-work-command-sources");
 const noAlternativeEmployees = require("../routers/settings/timex/no-alternative-employees");
 const vacationCardexSettings = require("../routers/settings/timex/vacation-cardex-settings");
+const vacationCardexes = require("../routers/settings/timex/vacation-cardexes");
 //------
 const vehicleTypes = require("../routers/settings/transmission/vehicle-types");
 const vehicleBrands = require("../routers/settings/transmission/vehicle-brands");
@@ -99,6 +100,7 @@ module.exports = function (app) {
     "/api/settings/timex/vacation-cardex-settings",
     vacationCardexSettings
   );
+  app.use("/api/settings/timex/vacation-cardexes", vacationCardexes);
   //------
   app.use("/api/settings/transmission/vehicle-types", vehicleTypes);
   app.use("/api/settings/transmission/vehicle-brands", vehicleBrands);
