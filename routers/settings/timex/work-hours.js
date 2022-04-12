@@ -6,7 +6,7 @@ const { selectQuery } = require("../../../startup/db");
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC TimexAPI.GetAllWorkShifts ${MemberID}`);
+  let result = await selectQuery(`EXEC TimexAPI.GetAllWorkHours ${MemberID}`);
 
   result = result.recordset;
 
@@ -18,7 +18,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SearchWorkShifts ${MemberID}, N'${searchText}'`
+    `EXEC TimexAPI.SearchWorkHours ${MemberID}, N'${searchText}'`
   );
 
   res.send(result.recordset);
@@ -28,7 +28,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SaveWorkShift ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC TimexAPI.SaveWorkHour ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -42,7 +42,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.DeleteWorkShift ${MemberID}, ${req.params.recordID}`
+    `EXEC TimexAPI.DeleteWorkHour ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
