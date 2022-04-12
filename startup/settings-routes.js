@@ -26,6 +26,7 @@ const missionTypes = require("../routers/settings/timex/mission-types");
 const holidays = require("../routers/settings/timex/holidays");
 const workHours = require("../routers/settings/timex/work-hours");
 const workGroups = require("../routers/settings/timex/work-groups");
+const workShifts = require("../routers/settings/timex/work-shifts");
 const regedCards = require("../routers/settings/timex/reged-cards");
 const officialExperts = require("../routers/settings/timex/official-experts");
 const vacationRequests = require("../routers/settings/timex/vacation-requests");
@@ -75,6 +76,7 @@ module.exports = function (app) {
   app.use("/api/settings/timex/holidays", holidays);
   app.use("/api/settings/timex/work-hours", workHours);
   app.use("/api/settings/timex/work-groups", workGroups);
+  app.use("/api/settings/timex/work-shifts", workShifts);
   app.use("/api/settings/timex/reged-cards", regedCards);
   app.use("/api/settings/timex/official-experts", officialExperts);
   app.use("/api/settings/timex/vacation-requests", vacationRequests);
