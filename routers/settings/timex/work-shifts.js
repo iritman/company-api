@@ -28,10 +28,13 @@ router.post("/search", auth, async (req, res) => {
     `EXEC TimexAPI.SearchWorkShifts ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
-  result = result.recordset;
+  result = result.recordset[0];
 
-  if (result.length === 1 && result[0].Error)
-    return res.status(400).send(result[0]);
+  if (result.Error) return res.status(400).send(result);
+
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
 
   res.send(result);
 });
