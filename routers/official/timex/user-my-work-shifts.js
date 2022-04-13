@@ -3,11 +3,11 @@ const auth = require("../../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../../startup/db");
 
-router.get("/params", auth, async (req, res) => {
+router.get("/:year", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.GetMyWorkShiftsParams ${MemberID}`
+    `EXEC TimexAPI.GetMyWorkShifts ${MemberID}, ${req.params.year}`
   );
 
   result = result.recordset[0];
@@ -19,18 +19,6 @@ router.get("/params", auth, async (req, res) => {
   }
 
   res.send(result);
-});
-
-router.post("/search", auth, async (req, res) => {
-  const { MemberID } = req.user;
-
-  let result = await selectQuery(
-    `EXEC TimexAPI.SearchMyWorkShifts ${MemberID}, N'${JSON.stringify(
-      req.body
-    )}'`
-  );
-
-  res.send(result.recordset);
 });
 
 module.exports = router;
