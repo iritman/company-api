@@ -30,7 +30,16 @@ router.post("/search", auth, async (req, res) => {
     )}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.WorkShifts = JSON.parse(result.WorkShifts);
+  result.Holidays = JSON.parse(result.Holidays);
+
+  console.log(result);
+
+  res.send(result);
 });
 
 module.exports = router;
