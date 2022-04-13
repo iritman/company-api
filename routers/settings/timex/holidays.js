@@ -31,6 +31,21 @@ router.get("/days/:year", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/:year", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TimexAPI.SetJomeHolidays ${MemberID}, ${req.params.year}`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result.Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
+});
+
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
