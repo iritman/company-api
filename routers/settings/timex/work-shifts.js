@@ -21,6 +21,36 @@ router.get("/params", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/repeat", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TimexAPI.RepeatWorkShifts ${MemberID}, N'${JSON.stringify(req.body)}'`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
+});
+
+router.post("/delete", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TimexAPI.DeleteWorkShifts ${MemberID}, N'${JSON.stringify(req.body)}'`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
