@@ -28,6 +28,8 @@ const userOfficialCheckMembersVacations = require("./../routers/official/timex/u
 const userOfficialCheckMembersMissions = require("./../routers/official/timex/user-official-check-members-missions");
 const userOfficialCheckVacationCardexes = require("./../routers/official/timex/user-official-check-vacation-cardexes");
 //---
+const userMyReports = require("./../routers/official/timex/reports/user-my-reports");
+//---
 const userTransmissionRequests = require("./../routers/official/transmission/user-transmission-requests");
 //---
 const userTaskTags = require("./../routers/official/tasks/tags");
@@ -112,6 +114,8 @@ module.exports = function (app) {
     "/api/official/timex/user-official-check-vacation-cardexes",
     userOfficialCheckVacationCardexes
   );
+  //---
+  app.use("/api/official/timex/reports/user-my-reports", userMyReports);
   //---
   app.use(
     "/api/official/transmission/user-transmission-requests",
