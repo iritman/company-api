@@ -33,6 +33,7 @@ const userMyReports = require("./../routers/official/timex/reports/user-my-repor
 const userTransmissionRequests = require("./../routers/official/transmission/user-transmission-requests");
 //---
 const userTaskTags = require("./../routers/official/tasks/tags");
+const userEmployeesTasks = require("./../routers/official/tasks/employees-tasks");
 const userIntervalTasks = require("./../routers/official/tasks/interval-tasks");
 //---
 
@@ -123,5 +124,6 @@ module.exports = function (app) {
   );
   //---
   app.use("/api/official/tasks/user-task-tags", userTaskTags);
+  app.use("/api/official/tasks/user-employees-tasks", userEmployeesTasks);
   app.use("/api/official/tasks/user-interval-tasks", userIntervalTasks);
 };
