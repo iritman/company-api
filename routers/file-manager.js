@@ -91,8 +91,10 @@ var uploadMiddleware = function (req, res, next) {
   }
 
   let maxFileSize = 512 * 1024;
-  if (req.header("maxFileSize")) {
-    maxFileSize = req.header("maxFileSize") * 1024 * 1024;
+  if (req.header("maxFileSize") && req.header("sizeType")) {
+    maxFileSize =
+      req.header("maxFileSize") *
+      (req.header("sizeType") === "mb" ? 1024 * 1024 : 1024);
   }
 
   var handler = upload(
@@ -100,6 +102,69 @@ var uploadMiddleware = function (req, res, next) {
     validFormats,
     maxFileSize
   ).single("dataFile"); //use whatever makes sense here
+
+  handler(req, res, function (err) {
+    //send error response if Multer threw an error
+
+    if (err) {
+      if (err.Error) {
+        return res.status(400).send(_.pick(err, ["Error"]));
+      } else {
+        if (err.code === "LIMIT_FILE_SIZE") {
+          return res.status(400).send({
+            ErrorType: "InvalidFileSize",
+            Error: "حجم فایل بیش از حد مجاز است",
+          });
+        } else
+          return res
+            .status(400)
+            .send({ ErrorType: "Global", Error: err.message });
+      }
+    }
+
+    //move to the next middleware, or to the route after no error was found
+    next();
+  });
+};
+
+var uploadMultiMiddleware = function (req, res, next) {
+  if (req.header("category")) {
+    const dir = `./uploaded-files/${req.header("category")}/`;
+
+    if (!fs.existsSync(dir)) {
+      return res.status(400).send({
+        ErrorType: "InvalidFileGroup",
+        Error: "گروه فایل معتبر نمی باشد",
+      });
+    }
+
+    // delete last uploaded file if requested
+    if (req.header("deleteFileName")) {
+      const fileDir = `${dir}${req.header("deleteFileName")}`;
+
+      if (fs.existsSync(fileDir)) {
+        try {
+          fs.unlinkSync(fileDir);
+        } catch {}
+      }
+    }
+  }
+
+  let validFormats = new RegExp(`\.(txt|doc|docx|pdf|png|jpg)$`);
+  if (req.header("extensions")) {
+    validFormats = new RegExp(`\.(${req.header("extensions")})$`);
+  }
+
+  let maxFileSize = 512 * 1024;
+  if (req.header("maxFileSize") && req.header("sizeType")) {
+    maxFileSize =
+      req.header("maxFileSize") *
+      (req.header("sizeType") === "mb" ? 1024 * 1024 : 1024);
+  }
+
+  var handler = upload(req.header("category"), validFormats, maxFileSize).array(
+    "dataFiles"
+  ); //use whatever makes sense here
 
   handler(req, res, function (err) {
     //send error response if Multer threw an error
@@ -146,6 +211,44 @@ router.post("/upload", [auth, uploadMiddleware], async function (req, res) {
 
   res.send({ uploaded: true, fileName: req.file.filename });
 });
+
+router.post(
+  "/uploads",
+  [auth, uploadMultiMiddleware],
+  async function (req, res) {
+    const dir = `./uploaded-files/${req.header("category")}/`;
+
+    if (!fs.existsSync(dir)) {
+      return res.status(400).send({
+        ErrorType: "InvalidFileGroup",
+        Error: "گروه فایل معتبر نمی باشد",
+      });
+    }
+
+    let files = [];
+    req.files.forEach((f) => {
+      files = [...files, { filename: f.filename, size: f.size }];
+    });
+
+    let not_uploaded = false;
+
+    for (let i = 0; i < files.length; i++) {
+      if (!fs.existsSync(`${dir}${files[i].filename}`)) {
+        not_uploaded = true;
+        break;
+      }
+    }
+
+    if (not_uploaded) {
+      return res.status(400).send({
+        ErrorType: "InvalidFile",
+        Error: "آپلود فایل امکانپذیر نمی باشد",
+      });
+    }
+
+    res.send({ uploaded: true, files });
+  }
+);
 
 router.get("/download/:file(*)", [auth], (req, res) => {
   let file = req.params.file;
