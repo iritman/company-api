@@ -22,6 +22,18 @@ router.get("/params", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/files/:taskID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TaskAPI.GetTaskFiles ${MemberID}, ${req.params.taskID}`
+  );
+
+  result = result.recordset;
+
+  res.send(result);
+});
+
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
