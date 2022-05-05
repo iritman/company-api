@@ -139,14 +139,19 @@ var uploadMultiMiddleware = function (req, res, next) {
     }
 
     // delete last uploaded file if requested
-    if (req.header("deleteFileName")) {
-      const fileDir = `${dir}${req.header("deleteFileName")}`;
+    if (req.header("removedFiles")) {
+      const files = JSON.parse(req.header("removedFiles"));
+      let fileDir = "";
 
-      if (fs.existsSync(fileDir)) {
-        try {
-          fs.unlinkSync(fileDir);
-        } catch {}
-      }
+      files.forEach((f) => {
+        fileDir = `${dir}${f.FileName}`;
+
+        if (fs.existsSync(fileDir)) {
+          try {
+            fs.unlinkSync(fileDir);
+          } catch {}
+        }
+      });
     }
   }
 
