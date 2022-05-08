@@ -165,7 +165,7 @@ router.post("/report/seen/:taskID", auth, async (req, res) => {
 router.delete("/report/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  // second params is <1> : submit report in employees tasks page
+  // second params is <1> : delete report in employees tasks page
   let result = await selectQuery(
     `EXEC TaskAPI.DeleteTaskReport ${MemberID}, 1, ${req.params.recordID}`
   );
