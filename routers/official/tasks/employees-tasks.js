@@ -34,10 +34,14 @@ router.get("/files/:taskID", auth, async (req, res) => {
   res.send(result);
 });
 
-router.get("/", auth, async (req, res) => {
+router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC TaskAPI.GetEmployeesTasks ${MemberID}`);
+  let result = await selectQuery(
+    `EXEC TaskAPI.SearchEmployeesTasks ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
 
   result = result.recordset;
 
@@ -58,22 +62,6 @@ router.get("/", auth, async (req, res) => {
 
   res.send(result);
 });
-
-// router.post("/search", auth, async (req, res) => {
-//   const { searchText } = req.body;
-//   const { MemberID } = req.user;
-
-//   let result = await selectQuery(
-//     `EXEC TaskAPI.SearchTags ${MemberID}, N'${searchText}'`
-//   );
-
-//   result = result.recordset;
-
-//   if (result.length === 1 && result[0].Error)
-//     return res.status(400).send(result[0]);
-
-//   res.send(result);
-// });
 
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
