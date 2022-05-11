@@ -150,6 +150,20 @@ router.post("/report/seen/:taskID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/cancel/done/:taskID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TaskAPI.CancelDoneTask ${MemberID}, N'${req.params.taskID}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.delete("/report/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
