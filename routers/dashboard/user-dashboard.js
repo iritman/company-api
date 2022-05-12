@@ -17,4 +17,20 @@ router.get("/timex", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/task", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TimexAPI.GetUserTasksDashboardStatistics ${MemberID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.MyColleagues = JSON.parse(result.MyColleagues);
+
+  res.send(result);
+});
+
 module.exports = router;
