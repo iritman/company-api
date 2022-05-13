@@ -91,8 +91,6 @@ router.get("/reports/new", auth, async (req, res) => {
     mission.Actions = JSON.parse(mission.Actions);
   });
 
-  console.log();
-
   res.send(result);
 });
 

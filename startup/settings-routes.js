@@ -19,6 +19,7 @@ const companyAgents = require("../routers/settings/org/company-agents");
 const dutyLevels = require("../routers/settings/org/duty-levels");
 const personalDuties = require("../routers/settings/org/personal-duties");
 const roleDuties = require("../routers/settings/org/role-duties");
+const bankAccounts = require("../routers/settings/org/bank-accounts");
 //------
 const securityGuards = require("../routers/settings/timex/security-guards");
 const securityGuardRegedCards = require("../routers/settings/timex/security-guard-reged-cards");
@@ -67,6 +68,7 @@ module.exports = function (app) {
   app.use("/api/settings/org/duty-levels", dutyLevels);
   app.use("/api/settings/org/personal-duties", personalDuties);
   app.use("/api/settings/org/role-duties", roleDuties);
+  app.use("/api/settings/org/bank-accounts", bankAccounts);
   //------
   app.use("/api/settings/timex/security-guards", securityGuards);
   app.use(

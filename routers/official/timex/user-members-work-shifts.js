@@ -37,8 +37,6 @@ router.post("/search", auth, async (req, res) => {
   result.WorkShifts = JSON.parse(result.WorkShifts);
   result.Holidays = JSON.parse(result.Holidays);
 
-  console.log(result);
-
   res.send(result);
 });
 
