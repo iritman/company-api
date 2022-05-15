@@ -21,7 +21,7 @@ router.get("/task", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.GetUserTasksDashboardStatistics ${MemberID}`
+    `EXEC TaskAPI.GetUserTasksDashboardStatistics ${MemberID}`
   );
 
   result = result.recordset[0];
