@@ -37,6 +37,8 @@ const userEmployeesTasks = require("./../routers/official/tasks/employees-tasks"
 const userMyTasks = require("./../routers/official/tasks/my-tasks");
 const userIntervalTasks = require("./../routers/official/tasks/interval-tasks");
 //---
+const userDismissals = require("./../routers/official/processes/user-dismissals");
+//---
 
 module.exports = function (app) {
   app.use("/api/official/org/user-duties", userDuties);
@@ -128,4 +130,6 @@ module.exports = function (app) {
   app.use("/api/official/tasks/user-employees-tasks", userEmployeesTasks);
   app.use("/api/official/tasks/user-my-tasks", userMyTasks);
   app.use("/api/official/tasks/user-interval-tasks", userIntervalTasks);
+  //---
+  app.use("/api/official/processes/user-dismissals", userDismissals);
 };
