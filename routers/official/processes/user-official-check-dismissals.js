@@ -2,6 +2,7 @@ const express = require("express");
 const auth = require("../../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../../startup/db");
+const fs = require("fs");
 
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
@@ -90,26 +91,31 @@ router.post("/report", auth, async (req, res) => {
   res.send(result);
 });
 
-// router.delete("/report/:recordID", auth, async (req, res) => {
-//   const { MemberID } = req.user;
+router.delete("/report/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
 
-//   let result = await selectQuery(
-//     `EXEC ProcessAPI.DeleteDismissalReport ${MemberID}, ${req.params.recordID}`
-//   );
+  let result = await selectQuery(
+    `EXEC ProcessAPI.DeleteDismissalOfficialReport ${MemberID}, ${req.params.recordID}`
+  );
 
-//   result = result.recordset[0];
+  result = result.recordset[0];
 
-//   if (result.Error) return res.status(400).send(result);
+  if (result.Error) return res.status(400).send(result);
 
-//   if (result.VehicleInfo.length > 0) {
-//     result.VehicleInfo = JSON.parse(result.VehicleInfo);
-//   }
+  result.DeletedFiles = JSON.parse(result.DeletedFiles);
 
-//   result.ReportInfo = JSON.parse(result.ReportInfo);
-//   result.Notes = JSON.parse(result.Notes);
-//   result.Actions = JSON.parse(result.Actions);
+  const baseDir = `./uploaded-files/dismissal-report-files`;
+  let dir = "";
 
-//   res.send(result);
-// });
+  result.DeletedFiles.forEach((f) => {
+    dir = `${baseDir}/${f.FileName}`;
+
+    if (fs.existsSync(dir)) {
+      fs.unlinkSync(dir);
+    }
+  });
+
+  res.send({ Message: result.Message });
+});
 
 module.exports = router;
