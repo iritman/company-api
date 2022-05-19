@@ -38,6 +38,7 @@ router.post("/search", auth, async (req, res) => {
   result.forEach((dismissal) => {
     dismissal.Reports = JSON.parse(dismissal.Reports);
     dismissal.Actions = JSON.parse(dismissal.Actions);
+    dismissal.Files = JSON.parse(dismissal.Files);
   });
 
   res.send(result);
@@ -56,6 +57,7 @@ router.post("/", auth, async (req, res) => {
 
   result.Reports = JSON.parse(result.Reports);
   result.Actions = JSON.parse(result.Actions);
+  result.Files = JSON.parse(result.Files);
 
   res.send(result);
 });
