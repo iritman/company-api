@@ -38,7 +38,28 @@ router.post("/search", auth, async (req, res) => {
   result.forEach((dismissal) => {
     dismissal.Reports = JSON.parse(dismissal.Reports);
     dismissal.Actions = JSON.parse(dismissal.Actions);
+    dismissal.Files = JSON.parse(dismissal.Files);
   });
+
+  res.send(result);
+});
+
+router.post("/response", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC ProcessAPI.SaveDismissalOfficialResponse ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.Reports = JSON.parse(result.Reports);
+  result.Actions = JSON.parse(result.Actions);
+  result.Files = JSON.parse(result.Files);
 
   res.send(result);
 });
