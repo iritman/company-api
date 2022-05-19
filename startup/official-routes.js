@@ -39,6 +39,8 @@ const userIntervalTasks = require("./../routers/official/tasks/interval-tasks");
 //---
 const userDismissals = require("./../routers/official/processes/user-dismissals");
 const userOfficialCheckDismissals = require("./../routers/official/processes/user-official-check-dismissals");
+const userEduFunds = require("./../routers/official/processes/user-edu-funds");
+const userOfficialCheckEduFunds = require("./../routers/official/processes/user-official-check-edu-funds");
 //---
 
 module.exports = function (app) {
@@ -136,5 +138,10 @@ module.exports = function (app) {
   app.use(
     "/api/official/processes/user-official-check-dismissals",
     userOfficialCheckDismissals
+  );
+  app.use("/api/official/processes/user-edu-funds", userEduFunds);
+  app.use(
+    "/api/official/processes/user-official-check-edu-funds",
+    userOfficialCheckEduFunds
   );
 };
