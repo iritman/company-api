@@ -77,6 +77,24 @@ router.post("/response", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/announce", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC ProcessAPI.SaveViolationOfficialAnnouncement ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.Files = JSON.parse(result.Files);
+
+  res.send(result);
+});
+
 router.post("/report", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -113,6 +131,33 @@ router.delete("/report/:recordID", auth, async (req, res) => {
   result.DeletedFiles = JSON.parse(result.DeletedFiles);
 
   const baseDir = `./uploaded-files/violation-report-files`;
+  let dir = "";
+
+  result.DeletedFiles.forEach((f) => {
+    dir = `${baseDir}/${f.FileName}`;
+
+    if (fs.existsSync(dir)) {
+      fs.unlinkSync(dir);
+    }
+  });
+
+  res.send({ Message: result.Message });
+});
+
+router.delete("/announce/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC ProcessAPI.DeleteViolationOfficialAnnouncement ${MemberID}, ${req.params.recordID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.DeletedFiles = JSON.parse(result.DeletedFiles);
+
+  const baseDir = `./uploaded-files/violation-announce-files`;
   let dir = "";
 
   result.DeletedFiles.forEach((f) => {
