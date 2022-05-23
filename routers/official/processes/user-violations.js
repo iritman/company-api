@@ -34,6 +34,40 @@ router.get("/files/:violationID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/announces", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC ProcessAPI.GetAllViolationAnnounces ${MemberID}`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((announce) => {
+    announce.Files = JSON.parse(announce.Files);
+    announce.SenderRequestFiles = JSON.parse(announce.SenderRequestFiles);
+  });
+
+  res.send(result);
+});
+
+router.post("/announce/seen/:announceID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC ProcessAPI.MakeSeenViolationAnnounce ${MemberID}, ${req.params.announceID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
