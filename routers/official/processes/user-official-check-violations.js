@@ -45,6 +45,7 @@ router.post("/search", auth, async (req, res) => {
     violation.Files = JSON.parse(violation.Files);
     violation.ResponseFiles = JSON.parse(violation.ResponseFiles);
     if (violation.AnnounceInfo) {
+      violation.AnnounceInfo = JSON.parse(violation.AnnounceInfo);
       violation.AnnounceInfo.Files = JSON.parse(violation.AnnounceInfo.Files);
     }
   });
@@ -71,6 +72,7 @@ router.post("/response", auth, async (req, res) => {
   result.Files = JSON.parse(result.Files);
   result.ResponseFiles = JSON.parse(result.ResponseFiles);
   if (result.AnnounceInfo) {
+    result.AnnounceInfo = JSON.parse(result.AnnounceInfo);
     result.AnnounceInfo.Files = JSON.parse(result.AnnounceInfo.Files);
   }
 
