@@ -36,18 +36,12 @@ router.post("/search", auth, async (req, res) => {
   if (result.length === 1 && result[0].Error)
     return res.status(400).send(result[0]);
 
-  result.forEach((violation) => {
-    violation.Reports = JSON.parse(violation.Reports);
-    violation.Reports.forEach(
-      (report) => (report.Files = JSON.parse(report.Files))
-    );
-    violation.Actions = JSON.parse(violation.Actions);
-    violation.Files = JSON.parse(violation.Files);
-    violation.ResponseFiles = JSON.parse(violation.ResponseFiles);
-    if (violation.AnnounceInfo) {
-      violation.AnnounceInfo = JSON.parse(violation.AnnounceInfo);
-      violation.AnnounceInfo.Files = JSON.parse(violation.AnnounceInfo.Files);
-    }
+  result.forEach((checkout) => {
+    checkout.Actions = JSON.parse(checkout.Actions);
+    checkout.Actions.forEach((action) => {
+      action.Files = JSON.parse(action.Files);
+    });
+    checkout.Files = JSON.parse(checkout.Files);
   });
 
   res.send(result);
@@ -66,15 +60,11 @@ router.post("/response", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
-  result.Reports = JSON.parse(result.Reports);
-  result.Reports.forEach((report) => (report.Files = JSON.parse(report.Files)));
   result.Actions = JSON.parse(result.Actions);
+  result.Actions.forEach((action) => {
+    action.Files = JSON.parse(action.Files);
+  });
   result.Files = JSON.parse(result.Files);
-  result.ResponseFiles = JSON.parse(result.ResponseFiles);
-  if (result.AnnounceInfo) {
-    result.AnnounceInfo = JSON.parse(result.AnnounceInfo);
-    result.AnnounceInfo.Files = JSON.parse(result.AnnounceInfo.Files);
-  }
 
   res.send(result);
 });

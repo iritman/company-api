@@ -1,7 +1,7 @@
 const express = require("express");
-const auth = require("../../../middlewares/auth");
+const auth = require("../../../../middlewares/auth");
 const router = express.Router();
-const { selectQuery } = require("../../../startup/db");
+const { selectQuery } = require("../../../../startup/db");
 const fs = require("fs");
 
 router.get("/params", auth, async (req, res) => {
