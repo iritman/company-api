@@ -37,15 +37,16 @@ const userEmployeesTasks = require("./../routers/official/tasks/employees-tasks"
 const userMyTasks = require("./../routers/official/tasks/my-tasks");
 const userIntervalTasks = require("./../routers/official/tasks/interval-tasks");
 //---
-const userDismissals = require("./../routers/official/processes/user-dismissals");
-const userOfficialCheckDismissals = require("./../routers/official/processes/user-official-check-dismissals");
-const userEduFunds = require("./../routers/official/processes/user-edu-funds");
-const userOfficialCheckEduFunds = require("./../routers/official/processes/user-official-check-edu-funds");
-const userViolations = require("./../routers/official/processes/user-violations");
-const userOfficialCheckViolations = require("./../routers/official/processes/user-official-check-violations");
-const userDepartmentViolations = require("./../routers/official/processes/user-department-violations");
-const userMyViolations = require("./../routers/official/processes/user-my-violations");
-const userCheckouts = require("./../routers/official/processes/user-checkouts");
+const userDismissals = require("../routers/official/processes/dismissals/user-dismissals");
+const userOfficialCheckDismissals = require("./../routers/official/processes/dismissals/user-official-check-dismissals");
+const userEduFunds = require("../routers/official/processes/edu-funds/user-edu-funds");
+const userOfficialCheckEduFunds = require("./../routers/official/processes/edu-funds/user-official-check-edu-funds");
+const userViolations = require("./../routers/official/processes/violations/user-violations");
+const userOfficialCheckViolations = require("./../routers/official/processes/violations/user-official-check-violations");
+const userDepartmentViolations = require("../routers/official/processes/violations/user-department-violations");
+const userMyViolations = require("./../routers/official/processes/violations/user-my-violations");
+const userCheckouts = require("../routers/official/processes/checkouts/user-checkouts");
+const userDepartmentCheckouts = require("../routers/official/processes/checkouts/user-department-checkouts");
 //---
 
 module.exports = function (app) {
@@ -160,4 +161,8 @@ module.exports = function (app) {
   );
   app.use("/api/official/processes/user-my-violations", userMyViolations);
   app.use("/api/official/processes/user-checkouts", userCheckouts);
+  app.use(
+    "/api/official/processes/user-department-checkouts",
+    userDepartmentCheckouts
+  );
 };
