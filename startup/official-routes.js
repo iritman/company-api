@@ -47,6 +47,7 @@ const userDepartmentViolations = require("../routers/official/processes/violatio
 const userMyViolations = require("./../routers/official/processes/violations/user-my-violations");
 const userCheckouts = require("../routers/official/processes/checkouts/user-checkouts");
 const userDepartmentCheckouts = require("../routers/official/processes/checkouts/user-department-checkouts");
+const userInformaticCheckouts = require("../routers/official/processes/checkouts/user-informatic-checkouts");
 //---
 
 module.exports = function (app) {
@@ -164,5 +165,9 @@ module.exports = function (app) {
   app.use(
     "/api/official/processes/user-department-checkouts",
     userDepartmentCheckouts
+  );
+  app.use(
+    "/api/official/processes/user-informatic-checkouts",
+    userInformaticCheckouts
   );
 };
