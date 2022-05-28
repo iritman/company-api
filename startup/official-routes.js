@@ -50,6 +50,7 @@ const userDepartmentCheckouts = require("../routers/official/processes/checkouts
 const userInformaticCheckouts = require("../routers/official/processes/checkouts/user-informatic-checkouts");
 const userStoreCheckouts = require("../routers/official/processes/checkouts/user-store-checkouts");
 const userFinancialCheckouts = require("../routers/official/processes/checkouts/user-financial-checkouts");
+const userMgrTransfers = require("../routers/official/processes/mgr-transfers/user-mgr-transfers");
 //---
 
 module.exports = function (app) {
@@ -177,4 +178,5 @@ module.exports = function (app) {
     "/api/official/processes/user-financial-checkouts",
     userFinancialCheckouts
   );
+  app.use("/api/official/processes/user-mgr-transfers", userMgrTransfers);
 };
