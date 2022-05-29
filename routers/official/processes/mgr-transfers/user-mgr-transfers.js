@@ -138,7 +138,7 @@ router.post("/response", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC ProcessAPI.SaveOfficialManagementTransferResponse ${MemberID}, N'${JSON.stringify(
+    `EXEC ProcessAPI.SaveOfficialCheckManagementTransferResponse ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
