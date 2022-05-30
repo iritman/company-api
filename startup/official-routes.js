@@ -53,6 +53,7 @@ const userFinancialCheckouts = require("../routers/official/processes/checkouts/
 const userMgrTransfers = require("../routers/official/processes/mgr-transfers/user-mgr-transfers");
 const userStoreMgrTransfers = require("../routers/official/processes/mgr-transfers/user-store-mgr-transfers");
 const userEmployeeMgrTransfers = require("../routers/official/processes/mgr-transfers/user-employee-mgr-transfers");
+const userDepartmentMgrTransfers = require("../routers/official/processes/mgr-transfers/user-department-mgr-transfers");
 //---
 
 module.exports = function (app) {
@@ -188,5 +189,9 @@ module.exports = function (app) {
   app.use(
     "/api/official/processes/user-employee-mgr-transfers",
     userEmployeeMgrTransfers
+  );
+  app.use(
+    "/api/official/processes/user-department-mgr-transfers",
+    userDepartmentMgrTransfers
   );
 };
