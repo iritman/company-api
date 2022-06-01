@@ -55,6 +55,7 @@ const userStoreMgrTransfers = require("../routers/official/processes/mgr-transfe
 const userEmployeeMgrTransfers = require("../routers/official/processes/mgr-transfers/user-employee-mgr-transfers");
 const userDepartmentMgrTransfers = require("../routers/official/processes/mgr-transfers/user-department-mgr-transfers");
 const userPersonalTransfers = require("../routers/official/processes/personal-transfers/user-personal-transfers");
+const userDepartmentPersonalTransfers = require("../routers/official/processes/personal-transfers/user-department-personal-transfers");
 //---
 
 module.exports = function (app) {
@@ -198,5 +199,9 @@ module.exports = function (app) {
   app.use(
     "/api/official/processes/user-personal-transfers",
     userPersonalTransfers
+  );
+  app.use(
+    "/api/official/processes/user-department-personal-transfers",
+    userDepartmentPersonalTransfers
   );
 };
