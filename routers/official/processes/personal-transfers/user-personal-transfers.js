@@ -49,10 +49,10 @@ router.post("/search", auth, async (req, res) => {
     return res.status(400).send(result[0]);
 
   result.forEach((transfer) => {
-    transfer.Reports = JSON.parse(transfer.Reports);
-    transfer.Reports.forEach(
-      (report) => (report.Files = JSON.parse(report.Files))
-    );
+    // transfer.Reports = JSON.parse(transfer.Reports);
+    // transfer.Reports.forEach(
+    //   (report) => (report.Files = JSON.parse(report.Files))
+    // );
     transfer.Actions = JSON.parse(transfer.Actions);
     transfer.Actions.forEach((action) => {
       action.Files = JSON.parse(action.Files);
@@ -112,33 +112,11 @@ router.delete("/:recordID", auth, async (req, res) => {
   res.send({ Message: result.Message });
 });
 
-router.post("/report", auth, async (req, res) => {
-  const { MemberID } = req.user;
-
-  let result = await selectQuery(
-    `EXEC ProcessAPI.SavePersonalTransferOfficialReport ${MemberID}, N'${JSON.stringify(
-      req.body
-    )}'`
-  );
-
-  result = result.recordset[0];
-
-  if (result.Error) return res.status(400).send(result);
-
-  //---
-
-  result.Files = JSON.parse(result.Files);
-
-  //---
-
-  res.send(result);
-});
-
 router.post("/response", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC ProcessAPI.SaveOfficialCheckPersonalTransferResponse ${MemberID}, N'${JSON.stringify(
+    `EXEC ProcessAPI.SavePersonalTransferResponse ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -147,8 +125,8 @@ router.post("/response", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
-  result.Reports = JSON.parse(result.Reports);
-  result.Reports.forEach((report) => (report.Files = JSON.parse(report.Files)));
+  // result.Reports = JSON.parse(result.Reports);
+  // result.Reports.forEach((report) => (report.Files = JSON.parse(report.Files)));
   result.Actions = JSON.parse(result.Actions);
   result.Actions.forEach((action) => {
     action.Files = JSON.parse(action.Files);
@@ -156,33 +134,6 @@ router.post("/response", auth, async (req, res) => {
   result.Files = JSON.parse(result.Files);
 
   res.send(result);
-});
-
-router.delete("/report/:recordID", auth, async (req, res) => {
-  const { MemberID } = req.user;
-
-  let result = await selectQuery(
-    `EXEC ProcessAPI.DeletePersonalTransferOfficialReport ${MemberID}, ${req.params.recordID}`
-  );
-
-  result = result.recordset[0];
-
-  if (result.Error) return res.status(400).send(result);
-
-  result.DeletedFiles = JSON.parse(result.DeletedFiles);
-
-  const baseDir = `./uploaded-files/personal-transfer-report-files`;
-  let dir = "";
-
-  result.DeletedFiles.forEach((f) => {
-    dir = `${baseDir}/${f.FileName}`;
-
-    if (fs.existsSync(dir)) {
-      fs.unlinkSync(dir);
-    }
-  });
-
-  res.send({ Message: result.Message });
 });
 
 module.exports = router;
