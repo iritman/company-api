@@ -7,7 +7,7 @@ router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.GetOfficialExpertsParams ${MemberID}`
+    `EXEC OrgAPI.GetStoreExpertsParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -24,9 +24,7 @@ router.get("/params", auth, async (req, res) => {
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(
-    `EXEC TimexAPI.GetAllOfficialExperts ${MemberID}`
-  );
+  let result = await selectQuery(`EXEC OrgAPI.GetAllStoreExperts ${MemberID}`);
 
   result = result.recordset;
 
@@ -37,7 +35,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SearchOfficialExperts ${MemberID}, N'${req.body.searchText}'`
+    `EXEC OrgAPI.SearchStoreExperts ${MemberID}, N'${req.body.searchText}'`
   );
 
   res.send(result.recordset);
@@ -47,9 +45,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.SaveOfficialExpert ${MemberID}, N'${JSON.stringify(
-      req.body
-    )}'`
+    `EXEC OrgAPI.SaveStoreExpert ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -63,7 +59,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC TimexAPI.DeleteOfficialExpert ${MemberID}, ${req.params.recordID}`
+    `EXEC OrgAPI.DeleteStoreExpert ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
