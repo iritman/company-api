@@ -15,6 +15,10 @@ router.get("/", auth, async (req, res) => {
   if (result.length === 1 && result[0].Error)
     return res.status(400).send(result[0]);
 
+  result.forEach((clientType) => {
+    clientType.Services = JSON.parse(clientType.Services);
+  });
+
   res.send(result);
 });
 
@@ -31,6 +35,10 @@ router.post("/search", auth, async (req, res) => {
   if (result.length === 1 && result[0].Error)
     return res.status(400).send(result[0]);
 
+  result.forEach((clientType) => {
+    clientType.Services = JSON.parse(result.Services);
+  });
+
   res.send(result);
 });
 
@@ -46,6 +54,8 @@ router.post("/", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  result.Services = JSON.parse(result.Services);
 
   res.send(result);
 });
