@@ -48,6 +48,8 @@ const vehicleBrands = require("../routers/settings/transmission/vehicle-brands")
 const vehicleModels = require("../routers/settings/transmission/vehicle-models");
 const vehicles = require("../routers/settings/transmission/vehicles");
 //------
+const clientTypes = require("../routers/settings/ceremony/client-types");
+//------
 
 module.exports = function (app) {
   app.use("/api/settings/basic-info/provinces", provinces);
@@ -114,4 +116,6 @@ module.exports = function (app) {
   app.use("/api/settings/transmission/vehicle-brands", vehicleBrands);
   app.use("/api/settings/transmission/vehicle-models", vehicleModels);
   app.use("/api/settings/transmission/vehicles", vehicles);
+  //------
+  app.use("/api/settings/ceremony/client-types", clientTypes);
 };
