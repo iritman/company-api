@@ -7,7 +7,7 @@ router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC CeremonyAPI.GetAllSessionLocations ${MemberID}`
+    `EXEC ProcessAPI.GetAllSessionLocations ${MemberID}`
   );
 
   result = result.recordset;
@@ -23,7 +23,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC CeremonyAPI.SearchSessionLocations ${MemberID}, N'${searchText}'`
+    `EXEC ProcessAPI.SearchSessionLocations ${MemberID}, N'${searchText}'`
   );
 
   result = result.recordset;
@@ -38,7 +38,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC CeremonyAPI.SaveSessionLocation ${MemberID}, N'${JSON.stringify(
+    `EXEC ProcessAPI.SaveSessionLocation ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -54,7 +54,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC CeremonyAPI.DeleteSessionLocation ${MemberID}, ${req.params.recordID}`
+    `EXEC ProcessAPI.DeleteSessionLocation ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
