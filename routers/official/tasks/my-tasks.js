@@ -77,6 +77,30 @@ router.get("/", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TaskAPI.SaveMyTask ${MemberID}, N'${JSON.stringify(req.body)}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.Tags = JSON.parse(result.Tags);
+  result.Reports = JSON.parse(result.Reports);
+  result.Reports.forEach((report) => {
+    report.TaskReportSeens = JSON.parse(report.TaskReportSeens);
+    report.Files = JSON.parse(report.Files);
+  });
+  result.Supervisors = JSON.parse(result.Supervisors);
+  result.Files = JSON.parse(result.Files);
+  result.ReminderInfo = JSON.parse(result.ReminderInfo);
+
+  res.send(result);
+});
+
 router.post("/task/seen/:taskID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -171,34 +195,34 @@ router.post("/", auth, async (req, res) => {
   res.send(result);
 });
 
-// router.delete("/:recordID", auth, async (req, res) => {
-//   const { MemberID } = req.user;
+router.delete("/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
 
-//   let result = await selectQuery(
-//     `EXEC TaskAPI.DeleteEmployeeTask ${MemberID}, ${req.params.recordID}`
-//   );
+  let result = await selectQuery(
+    `EXEC TaskAPI.DeleteMyTask ${MemberID}, ${req.params.recordID}`
+  );
 
-//   result = result.recordset[0];
+  result = result.recordset[0];
 
-//   if (result.Error) return res.status(400).send(result);
+  if (result.Error) return res.status(400).send(result);
 
-//   result.DeletedFiles = JSON.parse(result.DeletedFiles);
+  result.DeletedFiles = JSON.parse(result.DeletedFiles);
 
-//   const baseDir = `./uploaded-files/`;
-//   let dir = "";
+  const baseDir = `./uploaded-files/`;
+  let dir = "";
 
-//   result.DeletedFiles.forEach((f) => {
-//     dir = `${baseDir}${f.TypeID === 1 ? "task-files" : "task-report-files"}/${
-//       f.FileName
-//     }`;
+  result.DeletedFiles.forEach((f) => {
+    dir = `${baseDir}${f.TypeID === 1 ? "task-files" : "task-report-files"}/${
+      f.FileName
+    }`;
 
-//     if (fs.existsSync(dir)) {
-//       fs.unlinkSync(dir);
-//     }
-//   });
+    if (fs.existsSync(dir)) {
+      fs.unlinkSync(dir);
+    }
+  });
 
-//   res.send({ Message: result.Message });
-// });
+  res.send({ Message: result.Message });
+});
 
 router.post("/report", auth, async (req, res) => {
   const { MemberID } = req.user;
