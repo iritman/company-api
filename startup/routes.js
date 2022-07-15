@@ -4,8 +4,9 @@ const filemanager = require("../routers/file-manager");
 const modules = require("../routers/global/modules");
 const accesses = require("../routers/global/accesses");
 //------
-const officialRoutes = require("./official-routes");
 const settingsRoutes = require("./settings-routes");
+const officialRoutes = require("./official-routes");
+const financialRoutes = require("./financial-routes");
 const dashboardRoutes = require("./dashboard-routes");
 //------
 
@@ -18,8 +19,9 @@ module.exports = function (app) {
   app.use("/api/global/modules", modules);
   app.use("/api/global/accesses", accesses);
   //------
-  officialRoutes(app);
   settingsRoutes(app);
+  officialRoutes(app);
+  financialRoutes(app);
   dashboardRoutes(app);
   //------
   let dir = "./uploaded-files/";
