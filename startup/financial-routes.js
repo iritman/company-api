@@ -2,6 +2,7 @@ const userStores = require("./../routers/financial/store-mgr/user-stores");
 const userProductNatures = require("./../routers/financial/store-mgr/user-product-natures");
 const userMesureTypes = require("./../routers/financial/store-mgr/user-measure-types");
 const userMesureUnits = require("./../routers/financial/store-mgr/user-measure-units");
+const userPricingTypes = require("./../routers/financial/store-mgr/user-pricing-types");
 //---
 
 module.exports = function (app) {
@@ -9,4 +10,5 @@ module.exports = function (app) {
   app.use("/api/financial/store-mgr/user-product-natures", userProductNatures);
   app.use("/api/financial/store-mgr/user-measure-types", userMesureTypes);
   app.use("/api/financial/store-mgr/user-measure-units", userMesureUnits);
+  app.use("/api/financial/store-mgr/user-pricing-types", userPricingTypes);
 };
