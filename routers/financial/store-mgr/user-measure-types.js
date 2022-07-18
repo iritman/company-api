@@ -18,6 +18,24 @@ router.get("/", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/params", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.GetMeasureTypesParams ${MemberID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { searchText } = req.body;
   const { MemberID } = req.user;
