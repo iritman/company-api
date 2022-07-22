@@ -85,11 +85,41 @@ router.post("/", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/feature", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.SaveProductFeature ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
     `EXEC Financial_StoreAPI.DeleteProduct ${MemberID}, ${req.params.recordID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.delete("/feature/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.DeleteProductFeature ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
