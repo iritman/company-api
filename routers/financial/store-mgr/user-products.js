@@ -101,6 +101,23 @@ router.post("/feature", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/measure-unit", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.SaveProductMeasureUnit ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
+});
+
 router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -120,6 +137,20 @@ router.delete("/feature/:recordID", auth, async (req, res) => {
 
   let result = await selectQuery(
     `EXEC Financial_StoreAPI.DeleteProductFeature ${MemberID}, ${req.params.recordID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.delete("/measure-unit/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.DeleteProductMeasureUnit ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
