@@ -19,7 +19,8 @@ router.get("/", auth, async (req, res) => {
     product.Features = JSON.parse(product.Features);
     product.MeasureUnits = JSON.parse(product.MeasureUnits);
     product.MeasureConverts = JSON.parse(product.MeasureConverts);
-    product.Stores = JSON.parse(product.MeasureConverts);
+    product.Stores = JSON.parse(product.Stores);
+    product.InventoryControlAgents = JSON.parse(product.InventoryControlAgents);
   });
 
   res.send(result);
@@ -62,6 +63,7 @@ router.post("/search", auth, async (req, res) => {
     product.MeasureUnits = JSON.parse(product.MeasureUnits);
     product.MeasureConverts = JSON.parse(product.MeasureConverts);
     product.Stores = JSON.parse(product.Stores);
+    product.InventoryControlAgents = JSON.parse(product.InventoryControlAgents);
   });
 
   res.send(result);
@@ -152,6 +154,22 @@ router.post("/store", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/inventory-control-agent", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.SaveProductInventoryControlAgent ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -213,6 +231,20 @@ router.delete("/store/:recordID", auth, async (req, res) => {
 
   let result = await selectQuery(
     `EXEC Financial_StoreAPI.DeleteProductStore ${MemberID}, ${req.params.recordID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.delete("/inventory-control-agent/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.DeleteProductInventoryControlAgent ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
