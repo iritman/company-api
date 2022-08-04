@@ -41,6 +41,10 @@ router.get("/params", auth, async (req, res) => {
     result[key] = JSON.parse(result[key]);
   }
 
+  result.BachPatterns.forEach((pattern) => {
+    pattern.Features = JSON.parse(pattern.Features);
+  });
+
   res.send(result);
 });
 
