@@ -9,6 +9,8 @@ const officialRoutes = require("./official-routes");
 const financialRoutes = require("./financial-routes");
 const dashboardRoutes = require("./dashboard-routes");
 //------
+const accountRoutes = require("./account-routes");
+//------
 
 module.exports = function (app) {
   app.use(express.json());
@@ -23,6 +25,7 @@ module.exports = function (app) {
   officialRoutes(app);
   financialRoutes(app);
   dashboardRoutes(app);
+  accountRoutes(app);
   //------
   let dir = "./uploaded-files/";
   app.use("/static/", express.static(dir));
