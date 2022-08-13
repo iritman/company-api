@@ -6,7 +6,9 @@ const { selectQuery } = require("../../../startup/db");
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(`EXEC AppAPI.GetAllFolderGroups ${MemberID}`);
+  let result = await selectQuery(
+    `EXEC EDocsAPI.GetAllFolderGroups ${MemberID}`
+  );
 
   result = result.recordset;
 
@@ -18,7 +20,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppAPI.SearchFolderGroups ${MemberID}, N'${searchText}'`
+    `EXEC EDocsAPI.SearchFolderGroups ${MemberID}, N'${searchText}'`
   );
 
   res.send(result.recordset);
@@ -28,7 +30,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppAPI.SaveFolderGroup ${MemberID}, N'${JSON.stringify(req.body)}'`
+    `EXEC EDocsAPI.SaveFolderGroup ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
@@ -42,7 +44,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AppAPI.DeleteFolderGroup ${MemberID}, ${req.params.recordID}`
+    `EXEC EDocsAPI.DeleteFolderGroup ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
