@@ -65,6 +65,7 @@ const userCeremonyRequests = require("../routers/official/processes/ceremony/use
 const userOfficialCheckCeremonyRequests = require("../routers/official/processes/ceremony/user-official-check-ceremony-requests");
 //---
 const userFolderGroups = require("../routers/official/edocs/user-folder-groups");
+const userFolders = require("../routers/official/edocs/user-folders");
 //---
 
 module.exports = function (app) {
@@ -237,4 +238,5 @@ module.exports = function (app) {
   );
   //---
   app.use("/api/official/edocs/user-folder-groups", userFolderGroups);
+  app.use("/api/official/edocs/user-folders", userFolders);
 };
