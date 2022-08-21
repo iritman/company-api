@@ -68,6 +68,7 @@ const userFolderGroups = require("../routers/official/edocs/user-folder-groups")
 const userFolders = require("../routers/official/edocs/user-folders");
 const userPermissions = require("../routers/official/edocs/user-permissions");
 const userFolderPermissions = require("../routers/official/edocs/user-folder-permissions");
+const userLabelTags = require("../routers/official/edocs/user-label-tags");
 //---
 
 module.exports = function (app) {
@@ -243,4 +244,5 @@ module.exports = function (app) {
   app.use("/api/official/edocs/user-folders", userFolders);
   app.use("/api/official/edocs/user-permissions", userPermissions);
   app.use("/api/official/edocs/user-folder-permissions", userFolderPermissions);
+  app.use("/api/official/edocs/user-label-tags", userLabelTags);
 };
