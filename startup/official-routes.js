@@ -38,6 +38,7 @@ const userMyTasks = require("./../routers/official/tasks/my-tasks");
 const userIntervalTasks = require("./../routers/official/tasks/interval-tasks");
 const userOthersTasks = require("./../routers/official/tasks/others-tasks");
 const userDepartmentTasks = require("./../routers/official/tasks/department-tasks");
+const userDepartmentsTasks = require("./../routers/official/tasks/departments-tasks");
 const userColleaguesTasks = require("./../routers/official/tasks/colleagues-tasks");
 const userSelectedSupervisors = require("./../routers/official/tasks/selected-supervisors");
 //---
@@ -165,6 +166,7 @@ module.exports = function (app) {
   app.use("/api/official/tasks/user-others-tasks", userOthersTasks);
   app.use("/api/official/tasks/user-colleagues-tasks", userColleaguesTasks);
   app.use("/api/official/tasks/user-department-tasks", userDepartmentTasks);
+  app.use("/api/official/tasks/user-departments-tasks", userDepartmentsTasks);
   app.use(
     "/api/official/tasks/user-selected-supervisors",
     userSelectedSupervisors
