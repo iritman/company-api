@@ -8,6 +8,7 @@ const userFeatures = require("./../routers/financial/store-mgr/user-features");
 const userInventoryControlAgents = require("./../routers/financial/store-mgr/user-inventory-control-agents");
 const userProducts = require("./../routers/financial/store-mgr/user-products");
 const userBachPatterns = require("./../routers/financial/store-mgr/user-bach-patterns");
+const userBaches = require("./../routers/financial/store-mgr/user-baches");
 //---
 
 module.exports = function (app) {
@@ -27,4 +28,5 @@ module.exports = function (app) {
   );
   app.use("/api/financial/store-mgr/user-products", userProducts);
   app.use("/api/financial/store-mgr/user-bach-patterns", userBachPatterns);
+  app.use("/api/financial/store-mgr/user-baches", userBaches);
 };
