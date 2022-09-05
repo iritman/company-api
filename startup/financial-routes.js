@@ -3,6 +3,7 @@ const costCencerTypes = require("./../routers/financial/public-settings/cost-cen
 const costCenters = require("./../routers/financial/public-settings/cost-centers");
 const currencies = require("./../routers/financial/public-settings/currencies");
 const currencyRatios = require("./../routers/financial/public-settings/currency-ratios");
+const creditSourceTypes = require("./../routers/financial/public-settings/credit-source-types");
 //---
 const userStores = require("./../routers/financial/store-mgr/user-stores");
 const userProductNatures = require("./../routers/financial/store-mgr/user-product-natures");
@@ -23,6 +24,10 @@ module.exports = function (app) {
   app.use("/api/financial/public-settings/cost-centers", costCenters);
   app.use("/api/financial/public-settings/currencies", currencies);
   app.use("/api/financial/public-settings/currency-ratios", currencyRatios);
+  app.use(
+    "/api/financial/public-settings/credit-source-types",
+    creditSourceTypes
+  );
   //---
   app.use("/api/financial/store-mgr/user-stores", userStores);
   app.use("/api/financial/store-mgr/user-product-natures", userProductNatures);
