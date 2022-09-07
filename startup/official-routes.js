@@ -41,6 +41,7 @@ const userDepartmentTasks = require("./../routers/official/tasks/department-task
 const userDepartmentsTasks = require("./../routers/official/tasks/departments-tasks");
 const userColleaguesTasks = require("./../routers/official/tasks/colleagues-tasks");
 const userSelectedSupervisors = require("./../routers/official/tasks/selected-supervisors");
+const userTopSupervisors = require("./../routers/official/tasks/top-supervisors");
 //---
 const userDismissals = require("../routers/official/processes/dismissals/user-dismissals");
 const userOfficialCheckDismissals = require("./../routers/official/processes/dismissals/user-official-check-dismissals");
@@ -171,6 +172,7 @@ module.exports = function (app) {
     "/api/official/tasks/user-selected-supervisors",
     userSelectedSupervisors
   );
+  app.use("/api/official/tasks/user-top-supervisors", userTopSupervisors);
   //---
   app.use("/api/official/processes/user-dismissals", userDismissals);
   app.use(
