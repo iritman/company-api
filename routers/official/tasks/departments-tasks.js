@@ -51,4 +51,66 @@ router.post("/search", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/report", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TaskAPI.SaveReportInDepartmentsTask ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset;
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.forEach((report) => {
+    report.TaskReportSeens = JSON.parse(report.TaskReportSeens);
+    report.Files = JSON.parse(report.Files);
+  });
+
+  res.send(result);
+});
+
+router.post("/report/seen/:taskID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TaskAPI.MakeReportsSeenInDepartmentsTask ${MemberID}, N'${req.params.taskID}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.delete("/report/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC TaskAPI.DeleteTaskReportInDepartmentsTask ${MemberID}, ${req.params.recordID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.DeletedFiles = JSON.parse(result.DeletedFiles);
+
+  const baseDir = `./uploaded-files/task-report-files`;
+  let dir = "";
+
+  result.DeletedFiles.forEach((f) => {
+    dir = `${baseDir}/${f.FileName}`;
+
+    if (fs.existsSync(dir)) {
+      fs.unlinkSync(dir);
+    }
+  });
+
+  res.send({ Message: result.Message });
+});
+
 module.exports = router;
