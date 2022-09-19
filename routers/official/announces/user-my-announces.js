@@ -2,6 +2,7 @@ const express = require("express");
 const auth = require("../../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../../startup/db");
+const fs = require("fs");
 
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
@@ -19,6 +20,24 @@ router.get("/", auth, async (req, res) => {
     announce.Files = JSON.parse(announce.Files);
     announce.Contacts = JSON.parse(announce.Contacts);
   });
+
+  res.send(result);
+});
+
+router.get("/params", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC AnnounceAPI.GetMyAnnouncesParams ${MemberID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
 
   res.send(result);
 });
@@ -57,6 +76,18 @@ router.get("/archive", auth, async (req, res) => {
   result.forEach((announce) => {
     announce.Files = JSON.parse(announce.Files);
   });
+
+  res.send(result);
+});
+
+router.get("/files/:announceID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC AnnounceAPI.GetAnnounceFiles ${MemberID}, ${req.params.announceID}`
+  );
+
+  result = result.recordset;
 
   res.send(result);
 });
@@ -111,6 +142,19 @@ router.delete("/:recordID", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  result.DeletedFiles = JSON.parse(result.DeletedFiles);
+
+  const baseDir = `./uploaded-files/`;
+  let dir = "";
+
+  result.DeletedFiles.forEach((f) => {
+    dir = `${baseDir}/announce-files/${f.FileName}`;
+
+    if (fs.existsSync(dir)) {
+      fs.unlinkSync(dir);
+    }
+  });
 
   res.send(result);
 });

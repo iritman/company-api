@@ -255,6 +255,6 @@ module.exports = function (app) {
   app.use("/api/official/edocs/user-folder-permissions", userFolderPermissions);
   app.use("/api/official/edocs/user-label-tags", userLabelTags);
   //---
-  app.use("/api/official/edocs/user-my-announces", userMyAnnounces);
-  app.use("/api/official/edocs/user-announces", userAnnounces);
+  app.use("/api/official/announces/user-my-announces", userMyAnnounces);
+  app.use("/api/official/announces/user-announces", userAnnounces);
 };
