@@ -159,4 +159,19 @@ router.delete("/:recordID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/seen/:announceID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+  const { announceID } = req.params;
+
+  let result = await selectQuery(
+    `EXEC AnnounceAPI.MakeSeenAnnounce ${MemberID}, ${announceID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 module.exports = router;
