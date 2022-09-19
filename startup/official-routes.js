@@ -73,6 +73,9 @@ const userPermissions = require("../routers/official/edocs/user-permissions");
 const userFolderPermissions = require("../routers/official/edocs/user-folder-permissions");
 const userLabelTags = require("../routers/official/edocs/user-label-tags");
 //---
+const userMyAnnounces = require("../routers/official/announces/user-my-announces");
+const userAnnounces = require("../routers/official/announces/user-announces");
+//---
 
 module.exports = function (app) {
   app.use("/api/official/org/user-duties", userDuties);
@@ -251,4 +254,7 @@ module.exports = function (app) {
   app.use("/api/official/edocs/user-permissions", userPermissions);
   app.use("/api/official/edocs/user-folder-permissions", userFolderPermissions);
   app.use("/api/official/edocs/user-label-tags", userLabelTags);
+  //---
+  app.use("/api/official/edocs/user-my-announces", userMyAnnounces);
+  app.use("/api/official/edocs/user-announces", userAnnounces);
 };

@@ -10,6 +10,9 @@ router.get("/", auth, async (req, res) => {
 
   result = result.recordset;
 
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
   res.send(result);
 });
 
@@ -21,7 +24,12 @@ router.post("/search", auth, async (req, res) => {
     `EXEC AppAPI.SearchBanks ${MemberID}, N'${searchText}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {
