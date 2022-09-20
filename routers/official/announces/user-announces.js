@@ -3,21 +3,23 @@ const auth = require("../../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../../startup/db");
 
-// router.get("/params", auth, async (req, res) => {
-//   const { MemberID } = req.user;
+router.get("/params", auth, async (req, res) => {
+  const { MemberID } = req.user;
 
-//   let result = await selectQuery(
-//     `EXEC AnnounceAPI.GetBankAccountsParams ${MemberID}`
-//   );
+  let result = await selectQuery(
+    `EXEC AnnounceAPI.GetAnnouncesParams ${MemberID}`
+  );
 
-//   result = result.recordset[0];
+  result = result.recordset[0];
 
-//   if (result.Error) return res.status(400).send(result);
+  if (result.Error) return res.status(400).send(result);
 
-//   result.Banks = JSON.parse(result.Banks);
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
 
-//   res.send(result);
-// });
+  res.send(result);
+});
 
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
