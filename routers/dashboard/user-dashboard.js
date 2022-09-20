@@ -64,7 +64,9 @@ router.get(
 
     if (result.Error) return res.status(400).send(result);
 
-    result.MyColleagues = JSON.parse(result.MyColleagues);
+    if (result.MyColleagues) {
+      result.MyColleagues = JSON.parse(result.MyColleagues);
+    }
 
     res.send(result);
   }
