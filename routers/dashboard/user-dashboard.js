@@ -33,6 +33,20 @@ router.get("/task", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/announce", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC AnnounceAPI.GetDashboardStatistics ${MemberID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.get(
   "/task/:departmentID/:calculateSubDepartments",
   auth,
