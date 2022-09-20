@@ -75,6 +75,7 @@ router.get("/archive", auth, async (req, res) => {
 
   result.forEach((announce) => {
     announce.Files = JSON.parse(announce.Files);
+    announce.Contacts = JSON.parse(announce.Contacts);
   });
 
   res.send(result);
@@ -93,11 +94,34 @@ router.get("/files/:announceID", auth, async (req, res) => {
 });
 
 router.post("/search", auth, async (req, res) => {
-  const { searchText } = req.body;
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC AnnounceAPI.SearchMyAnnounces ${MemberID}, N'${searchText}'`
+    `EXEC AnnounceAPI.SearchMyAnnounces ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((announce) => {
+    announce.Files = JSON.parse(announce.Files);
+    announce.Contacts = JSON.parse(announce.Contacts);
+  });
+
+  res.send(result);
+});
+
+router.post("/archive/search", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC AnnounceAPI.SearchArchivedAnnounces ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
   );
 
   result = result.recordset;
