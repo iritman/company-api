@@ -18,6 +18,8 @@ const userProducts = require("./../routers/financial/store-mgr/user-products");
 const userBachPatterns = require("./../routers/financial/store-mgr/user-bach-patterns");
 const userBaches = require("./../routers/financial/store-mgr/user-baches");
 //---
+const tafsilTypes = require("./../routers/financial/accounts/tafsil-types");
+//---
 
 module.exports = function (app) {
   app.use("/api/financial/public-settings/projects", projects);
@@ -48,5 +50,7 @@ module.exports = function (app) {
   app.use("/api/financial/store-mgr/user-products", userProducts);
   app.use("/api/financial/store-mgr/user-bach-patterns", userBachPatterns);
   app.use("/api/financial/store-mgr/user-baches", userBaches);
+  //---
+  app.use("/api/financial/accounts/tafsil-types", tafsilTypes);
   //---
 };
