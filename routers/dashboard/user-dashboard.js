@@ -56,7 +56,7 @@ router.get(
 
     let result = await selectQuery(
       `EXEC TaskAPI.GetDepartmentTasksDashboardStatistics ${MemberID}, ${departmentID}, ${
-        calculateSubDepartments === true
+        calculateSubDepartments === "true" ? 1 : 0
       }`
     );
 
