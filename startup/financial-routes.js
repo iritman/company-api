@@ -21,6 +21,7 @@ const userBaches = require("./../routers/financial/store-mgr/user-baches");
 const tafsilTypes = require("./../routers/financial/accounts/tafsil-types");
 const tafsilAccounts = require("./../routers/financial/accounts/tafsil-accounts");
 const structureGroups = require("./../routers/financial/accounts/structure-groups");
+const structureTotals = require("./../routers/financial/accounts/structure-totals");
 //---
 
 module.exports = function (app) {
@@ -56,5 +57,6 @@ module.exports = function (app) {
   app.use("/api/financial/accounts/tafsil-types", tafsilTypes);
   app.use("/api/financial/accounts/tafsil-accounts", tafsilAccounts);
   app.use("/api/financial/accounts/structure-groups", structureGroups);
+  app.use("/api/financial/accounts/structure-totals", structureTotals);
   //---
 };

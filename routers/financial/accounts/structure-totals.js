@@ -1,0 +1,85 @@
+const express = require("express");
+const auth = require("../../../middlewares/auth");
+const router = express.Router();
+const { selectQuery } = require("../../../startup/db");
+
+router.get("/params", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_AccountsAPI.GetStructureTotalsParams ${MemberID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
+
+  res.send(result);
+});
+
+router.get("/new-code/:groupID", auth, async (req, res) => {
+  let result = await selectQuery(
+    `SELECT Financial_AccountsAPI.GetNewStructureTotalCode(${req.params.groupID}) AS NewCode`
+  );
+
+  result = result.recordset[0];
+
+  res.send(result);
+});
+
+router.get("/:groupID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_AccountsAPI.GetAllStructureTotals ${MemberID}, ${req.params.groupID}`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((total) => {
+    total.Moeins = JSON.parse(total.Moeins);
+  });
+
+  res.send(result);
+});
+
+router.post("/", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_AccountsAPI.SaveStructureTotal ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.Moeins = JSON.parse(result.Moeins);
+
+  res.send(result);
+});
+
+router.delete("/:recordID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_AccountsAPI.DeleteStructureTotal ${MemberID}, ${req.params.recordID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+module.exports = router;
