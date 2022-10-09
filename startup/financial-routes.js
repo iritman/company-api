@@ -26,6 +26,7 @@ const structureMoeins = require("./../routers/financial/accounts/structure-moein
 //---
 const financialPeriods = require("./../routers/financial/ledger/financial-periods");
 const docTypes = require("./../routers/financial/ledger/doc-types");
+const ledgers = require("./../routers/financial/ledger/ledgers");
 //---
 
 module.exports = function (app) {
@@ -66,5 +67,6 @@ module.exports = function (app) {
   //---
   app.use("/api/financial/ledger/financial-periods", financialPeriods);
   app.use("/api/financial/ledger/doc-types", docTypes);
+  app.use("/api/financial/ledger/ledgers", ledgers);
   //---
 };
