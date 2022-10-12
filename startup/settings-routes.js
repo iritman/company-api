@@ -62,7 +62,6 @@ module.exports = function (app) {
   app.use("/api/settings/basic-info/employment-types", employmentTypes);
   app.use("/api/settings/basic-info/employment-statuses", employmentStatuses);
   app.use("/api/settings/basic-info/work-places", workPlaces);
-  app.use("/api/settings/basic-info/banks", banks);
   //------
   app.use("/api/settings/accesses/page-accesses", pageAccesses);
   //------
