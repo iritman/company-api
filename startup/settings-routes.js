@@ -6,7 +6,6 @@ const universities = require("../routers/settings/basic-info/universities");
 const employmentTypes = require("../routers/settings/basic-info/employment-types");
 const employmentStatuses = require("../routers/settings/basic-info/employment-statuses");
 const workPlaces = require("../routers/settings/basic-info/work-places");
-const banks = require("../routers/settings/basic-info/banks");
 //------
 const pageAccesses = require("../routers/settings/accesses/page-accesses");
 //------
