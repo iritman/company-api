@@ -31,6 +31,7 @@ const ledgers = require("./../routers/financial/ledger/ledgers");
 const bankTypes = require("./../routers/financial/treasury/basic-info/bank-types");
 const banks = require("./../routers/financial/treasury/basic-info/banks");
 const bankAccountTypes = require("./../routers/financial/treasury/basic-info/bank-account-types");
+const bankBranches = require("./../routers/financial/treasury/basic-info/bank-branches");
 //---
 
 module.exports = function (app) {
@@ -76,5 +77,6 @@ module.exports = function (app) {
   app.use("/api/financial/treasury/basic/bank-types", bankTypes);
   app.use("/api/financial/treasury/basic/banks", banks);
   app.use("/api/financial/treasury/basic/bank-account-types", bankAccountTypes);
+  app.use("/api/financial/treasury/basic/bank-branches", bankBranches);
   //---
 };
