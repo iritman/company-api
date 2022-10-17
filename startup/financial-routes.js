@@ -34,6 +34,7 @@ const bankAccountTypes = require("./../routers/financial/treasury/basic-info/ban
 const bankBranches = require("./../routers/financial/treasury/basic-info/bank-branches");
 const regards = require("./../routers/financial/treasury/basic-info/regards");
 const personCompanyBankAccounts = require("./../routers/financial/treasury/basic-info/person-company-bank-accounts");
+const companyBankAccounts = require("./../routers/financial/treasury/basic-info/company-bank-accounts");
 //---
 
 module.exports = function (app) {
@@ -84,6 +85,10 @@ module.exports = function (app) {
   app.use(
     "/api/financial/treasury/basic/pc-bank-accounts",
     personCompanyBankAccounts
+  );
+  app.use(
+    "/api/financial/treasury/basic/company-bank-accounts",
+    companyBankAccounts
   );
   //---
 };
