@@ -38,7 +38,7 @@ const companyBankAccounts = require("./../routers/financial/treasury/basic-info/
 const cashBoxes = require("./../routers/financial/treasury/basic-info/cash-boxes");
 const chequeBooks = require("./../routers/financial/treasury/basic-info/cheque-books");
 const cashFlows = require("./../routers/financial/treasury/basic-info/cash-flows");
-const financialOperations = require("./../routers/financial/treasury/basic-info/financial_operations");
+const financialOperations = require("../routers/financial/treasury/basic-info/financial-operations");
 //---
 
 module.exports = function (app) {
