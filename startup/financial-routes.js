@@ -39,6 +39,7 @@ const cashBoxes = require("./../routers/financial/treasury/basic-info/cash-boxes
 const chequeBooks = require("./../routers/financial/treasury/basic-info/cheque-books");
 const cashFlows = require("./../routers/financial/treasury/basic-info/cash-flows");
 const financialOperations = require("../routers/financial/treasury/basic-info/financial-operations");
+const standardDescriptions = require("../routers/financial/treasury/basic-info/standard-descriptions");
 //---
 
 module.exports = function (app) {
@@ -100,6 +101,10 @@ module.exports = function (app) {
   app.use(
     "/api/financial/treasury/basic/financial-operations",
     financialOperations
+  );
+  app.use(
+    "/api/financial/treasury/basic/standard-descriptions",
+    standardDescriptions
   );
   //---
 };
