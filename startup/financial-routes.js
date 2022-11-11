@@ -41,6 +41,8 @@ const cashFlows = require("./../routers/financial/treasury/basic-info/cash-flows
 const financialOperations = require("../routers/financial/treasury/basic-info/financial-operations");
 const standardDescriptions = require("../routers/financial/treasury/basic-info/standard-descriptions");
 //---
+const receiveRequests = require("../routers/financial/treasury/receive/receive-requests");
+//---
 
 module.exports = function (app) {
   app.use("/api/financial/public-settings/projects", projects);
@@ -106,5 +108,7 @@ module.exports = function (app) {
     "/api/financial/treasury/basic/standard-descriptions",
     standardDescriptions
   );
+  //---
+  app.use("/api/financial/treasury/receive/receive-requests", receiveRequests);
   //---
 };
