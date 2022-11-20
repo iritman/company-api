@@ -42,6 +42,7 @@ const financialOperations = require("../routers/financial/treasury/basic-info/fi
 const standardDescriptions = require("../routers/financial/treasury/basic-info/standard-descriptions");
 //---
 const receiveRequests = require("../routers/financial/treasury/receive/receive-requests");
+const receiveReceipts = require("../routers/financial/treasury/receive/receive-receipts");
 //---
 
 module.exports = function (app) {
@@ -110,5 +111,6 @@ module.exports = function (app) {
   );
   //---
   app.use("/api/financial/treasury/receive/receive-requests", receiveRequests);
+  app.use("/api/financial/treasury/receive/receive-receipts", receiveReceipts);
   //---
 };
