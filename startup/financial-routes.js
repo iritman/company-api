@@ -46,6 +46,8 @@ const receiveReceipts = require("../routers/financial/treasury/receive/receive-r
 //---
 const collectorAgents = require("../routers/financial/treasury/collector-agent/collector-agents");
 //---
+const funds = require("../routers/financial/treasury/fund/funds");
+//---
 
 module.exports = function (app) {
   app.use("/api/financial/public-settings/projects", projects);
@@ -119,5 +121,7 @@ module.exports = function (app) {
     "/api/financial/treasury/collector-agent/collector-agents",
     collectorAgents
   );
+  //---
+  app.use("/api/financial/treasury/fund/funds", funds);
   //---
 };
