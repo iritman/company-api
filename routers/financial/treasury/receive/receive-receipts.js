@@ -39,6 +39,20 @@ router.get("/items/params", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/account/:accountID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.SearchReceiveFrontSideAccountByID ${MemberID}, ${req.params.accountID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.post("/accounts", auth, async (req, res) => {
   const { MemberID } = req.user;
   const { searchText } = req.body;
@@ -86,7 +100,13 @@ router.post("/search", auth, async (req, res) => {
     return res.status(400).send(result[0]);
 
   result.forEach((request) => {
-    request.Items = JSON.parse(request.Items);
+    request.Cheques = JSON.parse(request.Cheques);
+    request.Demands = JSON.parse(request.Demands);
+    request.Cashes = JSON.parse(request.Cashes);
+    request.PaymentNotices = JSON.parse(request.PaymentNotices);
+    request.ReturnFromOthers = JSON.parse(request.ReturnFromOthers);
+    request.ReturnPayableCheques = JSON.parse(request.ReturnPayableCheques);
+    request.ReturnPayableDemands = JSON.parse(request.ReturnPayableDemands);
   });
 
   res.send(result);
@@ -105,16 +125,51 @@ router.post("/", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
-  result.Items = JSON.parse(result.Items);
+  result.Cheques = JSON.parse(result.Cheques);
+  result.Demands = JSON.parse(result.Demands);
+  result.Cashes = JSON.parse(result.Cashes);
+  result.PaymentNotices = JSON.parse(result.PaymentNotices);
+  result.ReturnFromOthers = JSON.parse(result.ReturnFromOthers);
+  result.ReturnPayableCheques = JSON.parse(result.ReturnPayableCheques);
+  result.ReturnPayableDemands = JSON.parse(result.ReturnPayableDemands);
 
   res.send(result);
 });
 
-router.post("/cheque", auth, async (req, res) => {
+router.post("/item/:itemType", auth, async (req, res) => {
   const { MemberID } = req.user;
+  const { itemType } = req.params;
+
+  let sp = "";
+  switch (itemType) {
+    case "cheque":
+      sp = "SaveReceiveCheque";
+      break;
+    case "demand":
+      sp = "SaveReceiveDemand";
+      break;
+    case "cash":
+      sp = "SaveReceiveCash";
+      break;
+    case "payment-notice":
+      sp = "SaveReceivePaymentNotice";
+      break;
+    case "return-from-other":
+      sp = "SaveReceiveReturnFromOther";
+      break;
+    case "return-payable-cheque":
+      sp = "SaveReceiveReturnPayableCheque";
+      break;
+    case "return-payable-demand":
+      sp = "SaveReceiveReturnPayableDemand";
+      break;
+    default:
+      sp = "";
+      break;
+  }
 
   let result = await selectQuery(
-    `EXEC Financial_TreasuryAPI.SaveReceiveCheque ${MemberID}, N'${JSON.stringify(
+    `EXEC Financial_TreasuryAPI.${sp} ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
