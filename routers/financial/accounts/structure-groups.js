@@ -48,6 +48,14 @@ router.get("/", auth, async (req, res) => {
 
     group.Totals.forEach((total) => {
       total.Moeins = JSON.parse(total.Moeins);
+
+      total.Moeins.forEach((moein) => {
+        moein.TafsilTypes = JSON.parse(moein.TafsilTypes);
+
+        moein.TafsilTypes.forEach((tt) => {
+          tt.TafsilTypes = JSON.parse(tt.TafsilTypes);
+        });
+      });
     });
   });
 

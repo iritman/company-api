@@ -43,6 +43,12 @@ router.get("/:totalID", auth, async (req, res) => {
   if (result.length === 1 && result[0].Error)
     return res.status(400).send(result[0]);
 
+  result.forEach((moein) => {
+    moein.TafsilTypes = JSON.parse(moein.TafsilTypes);
+  });
+
+  console.log(result);
+
   res.send(result);
 });
 
@@ -58,6 +64,11 @@ router.post("/", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  result.TafsilTypes = JSON.parse(result.TafsilTypes);
+  result.TafsilTypes.forEach((tt) => {
+    tt.TafsilTypes = JSON.parse(tt.TafsilTypes);
+  });
 
   res.send(result);
 });
