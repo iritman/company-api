@@ -44,6 +44,7 @@ const standardDescriptions = require("../routers/financial/treasury/basic-info/s
 const receiveRequests = require("../routers/financial/treasury/receive/receive-requests");
 const receiveReceipts = require("../routers/financial/treasury/receive/receive-receipts");
 const bankHandOvers = require("../routers/financial/treasury/receive/bank-hand-overs");
+const collectionRejections = require("../routers/financial/treasury/receive/collection-rejections");
 //---
 const collectorAgents = require("../routers/financial/treasury/collector-agent/collector-agents");
 //---
@@ -118,6 +119,10 @@ module.exports = function (app) {
   app.use("/api/financial/treasury/receive/receive-requests", receiveRequests);
   app.use("/api/financial/treasury/receive/receive-receipts", receiveReceipts);
   app.use("/api/financial/treasury/receive/bank-hand-overs", bankHandOvers);
+  app.use(
+    "/api/financial/treasury/receive/collection-rejections",
+    collectionRejections
+  );
   //---
   app.use(
     "/api/financial/treasury/collector-agent/collector-agents",
