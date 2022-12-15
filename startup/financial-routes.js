@@ -17,6 +17,7 @@ const userInventoryControlAgents = require("./../routers/financial/store-mgr/use
 const userProducts = require("./../routers/financial/store-mgr/user-products");
 const userBachPatterns = require("./../routers/financial/store-mgr/user-bach-patterns");
 const userBaches = require("./../routers/financial/store-mgr/user-baches");
+const userStorageCenters = require("./../routers/financial/store-mgr/user-storage-centers");
 //---
 const tafsilTypes = require("./../routers/financial/accounts/tafsil-types");
 const tafsilAccounts = require("./../routers/financial/accounts/tafsil-accounts");
@@ -80,6 +81,7 @@ module.exports = function (app) {
   app.use("/api/financial/store-mgr/user-products", userProducts);
   app.use("/api/financial/store-mgr/user-bach-patterns", userBachPatterns);
   app.use("/api/financial/store-mgr/user-baches", userBaches);
+  app.use("/api/financial/store-mgr/user-storage-centers", userStorageCenters);
   //---
   app.use("/api/financial/accounts/tafsil-types", tafsilTypes);
   app.use("/api/financial/accounts/tafsil-accounts", tafsilAccounts);
