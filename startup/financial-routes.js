@@ -42,6 +42,8 @@ const cashFlows = require("./../routers/financial/treasury/basic-info/cash-flows
 const financialOperations = require("../routers/financial/treasury/basic-info/financial-operations");
 const standardDescriptions = require("../routers/financial/treasury/basic-info/standard-descriptions");
 //---
+const paymentRequests = require("../routers/financial/treasury/pay/payment-requests");
+//---
 const receiveRequests = require("../routers/financial/treasury/receive/receive-requests");
 const receiveReceipts = require("../routers/financial/treasury/receive/receive-receipts");
 const bankHandOvers = require("../routers/financial/treasury/receive/bank-hand-overs");
@@ -117,6 +119,8 @@ module.exports = function (app) {
     "/api/financial/treasury/basic/standard-descriptions",
     standardDescriptions
   );
+  //---
+  app.use("/api/financial/treasury/pay/payment-requests", paymentRequests);
   //---
   app.use("/api/financial/treasury/receive/receive-requests", receiveRequests);
   app.use("/api/financial/treasury/receive/receive-receipts", receiveReceipts);
