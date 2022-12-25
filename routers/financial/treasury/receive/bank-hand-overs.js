@@ -39,11 +39,12 @@ router.get("/items/params", auth, async (req, res) => {
   res.send(result);
 });
 
-router.get("/cheques", auth, async (req, res) => {
+router.get("/cheques/:company_bank_account_id", auth, async (req, res) => {
   const { MemberID } = req.user;
+  const { company_bank_account_id } = req.params;
 
   let result = await selectQuery(
-    `EXEC Financial_TreasuryAPI.GetBankHandOverCheques ${MemberID}`
+    `EXEC Financial_TreasuryAPI.GetBankHandOverCheques ${MemberID}, ${company_bank_account_id}`
   );
 
   result = result.recordset[0];
@@ -55,11 +56,12 @@ router.get("/cheques", auth, async (req, res) => {
   res.send(result);
 });
 
-router.get("/demands", auth, async (req, res) => {
+router.get("/demands/:company_bank_account_id", auth, async (req, res) => {
   const { MemberID } = req.user;
+  const { company_bank_account_id } = req.params;
 
   let result = await selectQuery(
-    `EXEC Financial_TreasuryAPI.GetBankHandOverDemands ${MemberID}`
+    `EXEC Financial_TreasuryAPI.GetBankHandOverDemands ${MemberID}, ${company_bank_account_id}`
   );
 
   result = result.recordset[0];
