@@ -30,6 +30,13 @@ router.get("/", auth, async (req, res) => {
 
   result = result.recordset;
 
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((row) => {
+    if (row.TafsilInfo.length > 0) row.TafsilInfo = JSON.parse(row.TafsilInfo);
+  });
+
   res.send(result);
 });
 
@@ -41,7 +48,16 @@ router.post("/search", auth, async (req, res) => {
     `EXEC TransmissionAPI.SearchVehicles ${MemberID}, N'${searchText}'`
   );
 
-  res.send(result.recordset);
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((row) => {
+    if (row.TafsilInfo.length > 0) row.TafsilInfo = JSON.parse(row.TafsilInfo);
+  });
+
+  res.send(result);
 });
 
 router.post("/", auth, async (req, res) => {
@@ -56,6 +72,9 @@ router.post("/", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  if (result.TafsilInfo.length > 0)
+    result.TafsilInfo = JSON.parse(result.TafsilInfo);
 
   res.send(result);
 });
