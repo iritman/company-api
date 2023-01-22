@@ -100,6 +100,9 @@ router.post("/search", auth, async (req, res) => {
     return res.status(400).send(result[0]);
 
   result.forEach((request) => {
+    if (request.RequestInfo.length > 0)
+      request.RequestInfo = JSON.parse(request.RequestInfo);
+
     request.Cheques = JSON.parse(request.Cheques);
     request.Demands = JSON.parse(request.Demands);
     request.Cashes = JSON.parse(request.Cashes);
@@ -125,6 +128,8 @@ router.post("/", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  if (result.RequestInfo.length > 0)
+    result.RequestInfo = JSON.parse(result.RequestInfo);
   result.Cheques = JSON.parse(result.Cheques);
   result.Demands = JSON.parse(result.Demands);
   result.Cashes = JSON.parse(result.Cashes);

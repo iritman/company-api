@@ -47,8 +47,6 @@ router.get("/:totalID", auth, async (req, res) => {
     moein.TafsilTypes = JSON.parse(moein.TafsilTypes);
   });
 
-  console.log(result);
-
   res.send(result);
 });
 
