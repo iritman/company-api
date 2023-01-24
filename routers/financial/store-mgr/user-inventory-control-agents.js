@@ -15,26 +15,31 @@ router.get("/", auth, async (req, res) => {
   if (result.length === 1 && result[0].Error)
     return res.status(400).send(result[0]);
 
+  result.forEach((row) => {
+    if (row.Items.length > 0) row.Items = JSON.parse(row.Items);
+  });
+
   res.send(result);
 });
 
-// router.get("/params", auth, async (req, res) => {
-//   const { MemberID } = req.user;
+router.get("/params", auth, async (req, res) => {
+  const { MemberID } = req.user;
 
-//   let result = await selectQuery(
-//     `EXEC Financial_StoreAPI.GetInventoryControlAgentsParams ${MemberID}`
-//   );
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.GetInventoryControlAgentsParams ${MemberID}`
+  );
 
-//   result = result.recordset[0];
+  result = result.recordset[0];
 
-//   if (result.Error) return res.status(400).send(result);
+  if (result.Error) return res.status(400).send(result);
 
-//   for (const key in result) {
-//     result[key] = JSON.parse(result[key]);
-//   }
+  result.GroupFeatures = JSON.parse(result.GroupFeatures);
+  result.GroupFeatures.forEach((row) => {
+    if (row.Items.length > 0) row.Items = JSON.parse(row.Items);
+  });
 
-//   res.send(result);
-// });
+  res.send(result);
+});
 
 router.post("/search", auth, async (req, res) => {
   const { searchText } = req.body;
@@ -48,6 +53,10 @@ router.post("/search", auth, async (req, res) => {
 
   if (result.length === 1 && result[0].Error)
     return res.status(400).send(result[0]);
+
+  result.forEach((row) => {
+    if (row.Items.length > 0) row.Items = JSON.parse(row.Items);
+  });
 
   res.send(result);
 });
@@ -64,6 +73,8 @@ router.post("/", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  if (result.Items.length > 0) result.Items = JSON.parse(result.Items);
 
   res.send(result);
 });
