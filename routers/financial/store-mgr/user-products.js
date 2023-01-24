@@ -16,10 +16,10 @@ router.get("/", auth, async (req, res) => {
     return res.status(400).send(result[0]);
 
   result.forEach((product) => {
-    product.Features = JSON.parse(product.Features);
+    product.Stores = JSON.parse(product.Stores);
     product.MeasureUnits = JSON.parse(product.MeasureUnits);
     product.MeasureConverts = JSON.parse(product.MeasureConverts);
-    product.Stores = JSON.parse(product.Stores);
+    product.Features = JSON.parse(product.Features);
     product.InventoryControlAgents = JSON.parse(product.InventoryControlAgents);
   });
 
@@ -40,6 +40,11 @@ router.get("/params", auth, async (req, res) => {
   for (const key in result) {
     result[key] = JSON.parse(result[key]);
   }
+
+  result.Features.forEach((f) => (f.Items = JSON.parse(f.Items)));
+  result.InventoryControlAgents.forEach(
+    (ag) => (ag.Items = JSON.parse(ag.Items))
+  );
 
   result.BachPatterns.forEach((pattern) => {
     pattern.Features = JSON.parse(pattern.Features);
@@ -63,10 +68,10 @@ router.post("/search", auth, async (req, res) => {
     return res.status(400).send(result[0]);
 
   result.forEach((product) => {
-    product.Features = JSON.parse(product.Features);
+    product.Stores = JSON.parse(product.Stores);
     product.MeasureUnits = JSON.parse(product.MeasureUnits);
     product.MeasureConverts = JSON.parse(product.MeasureConverts);
-    product.Stores = JSON.parse(product.Stores);
+    product.Features = JSON.parse(product.Features);
     product.InventoryControlAgents = JSON.parse(product.InventoryControlAgents);
   });
 
@@ -86,18 +91,23 @@ router.post("/", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
-  result.Features = JSON.parse(result.Features);
+  result.Stores = JSON.parse(result.Stores);
   result.MeasureUnits = JSON.parse(result.MeasureUnits);
   result.MeasureConverts = JSON.parse(result.MeasureConverts);
+  result.Features = JSON.parse(result.Features);
+  result.InventoryControlAgents = JSON.parse(result.InventoryControlAgents);
+  result.InventoryControlAgents.forEach((row) => {
+    if (row.Items.length > 0) row.Items = JSON.parse(row.Items);
+  });
 
   res.send(result);
 });
 
-router.post("/feature", auth, async (req, res) => {
+router.post("/store", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreAPI.SaveProductFeature ${MemberID}, N'${JSON.stringify(
+    `EXEC Financial_StoreAPI.SaveProductStore ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -118,10 +128,9 @@ router.post("/measure-unit", auth, async (req, res) => {
     )}'`
   );
 
-  result = result.recordset;
+  result = result.recordset[0];
 
-  if (result.length === 1 && result[0].Error)
-    return res.status(400).send(result[0]);
+  if (result.Error) return res.status(400).send(result);
 
   res.send(result);
 });
@@ -142,11 +151,11 @@ router.post("/measure-convert", auth, async (req, res) => {
   res.send(result);
 });
 
-router.post("/store", auth, async (req, res) => {
+router.post("/feature", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreAPI.SaveProductStore ${MemberID}, N'${JSON.stringify(
+    `EXEC Financial_StoreAPI.SaveProductFeature ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -170,6 +179,8 @@ router.post("/inventory-control-agent", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  if (result.Items.length > 0) result.Items = JSON.parse(result.Items);
 
   res.send(result);
 });
