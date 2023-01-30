@@ -162,8 +162,8 @@ router.post("/item/:itemType", auth, async (req, res) => {
     case "receive-notice":
       sp = "SavePaymentReceiveNotice";
       break;
-    case "return-from-other":
-      sp = "SavePaymentReturnFromOther";
+    case "pay-to-other":
+      sp = "SavePaymentPayToOther";
       break;
     case "return-payable-cheque":
       sp = "SavePaymentReturnGetableCheque";
@@ -252,8 +252,8 @@ router.delete("/:itemType/:recordID", auth, async (req, res) => {
     case "receive-notice":
       sp = "DeletePaymentReceiveNotice";
       break;
-    case "return-from-other":
-      sp = "DeletePaymentReturnFromOther";
+    case "pay-to-other":
+      sp = "DeletePaymentPayToOther";
       break;
     case "return-payable-cheque":
       sp = "DeletePaymentReturnGetableCheque";
