@@ -107,7 +107,7 @@ router.post("/search", auth, async (req, res) => {
     request.Demands = JSON.parse(request.Demands);
     request.Cashes = JSON.parse(request.Cashes);
     request.ReceiveNotices = JSON.parse(request.ReceiveNotices);
-    request.ReturnFromOthers = JSON.parse(request.ReturnFromOthers);
+    request.PayToOthers = JSON.parse(request.PayToOthers);
     request.ReturnGetableCheques = JSON.parse(request.ReturnGetableCheques);
     request.ReturnGetableDemands = JSON.parse(request.ReturnGetableDemands);
   });
@@ -137,7 +137,7 @@ router.post("/", auth, async (req, res) => {
   result.Demands = JSON.parse(result.Demands);
   result.Cashes = JSON.parse(result.Cashes);
   result.ReceiveNotices = JSON.parse(result.ReceiveNotices);
-  result.ReturnFromOthers = JSON.parse(result.ReturnFromOthers);
+  result.PayToOthers = JSON.parse(result.PayToOthers);
   result.ReturnGetableCheques = JSON.parse(result.ReturnGetableCheques);
   result.ReturnGetableDemands = JSON.parse(result.ReturnGetableDemands);
 
