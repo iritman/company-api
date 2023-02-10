@@ -30,6 +30,8 @@ const financialPeriods = require("./../routers/financial/ledger/financial-period
 const docTypes = require("./../routers/financial/ledger/doc-types");
 const ledgers = require("./../routers/financial/ledger/ledgers");
 //---
+const vouchers = require("./../routers/financial/financial-docs/vouchers");
+//---
 const bankTypes = require("./../routers/financial/treasury/basic-info/bank-types");
 const banks = require("./../routers/financial/treasury/basic-info/banks");
 const bankAccountTypes = require("./../routers/financial/treasury/basic-info/bank-account-types");
@@ -97,6 +99,8 @@ module.exports = function (app) {
   app.use("/api/financial/ledger/financial-periods", financialPeriods);
   app.use("/api/financial/ledger/doc-types", docTypes);
   app.use("/api/financial/ledger/ledgers", ledgers);
+  //---
+  app.use("/api/financial/docs/vouchers", vouchers);
   //---
   app.use("/api/financial/treasury/basic/bank-types", bankTypes);
   app.use("/api/financial/treasury/basic/banks", banks);
