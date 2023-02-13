@@ -31,6 +31,7 @@ const docTypes = require("./../routers/financial/ledger/doc-types");
 const ledgers = require("./../routers/financial/ledger/ledgers");
 //---
 const vouchers = require("./../routers/financial/financial-docs/vouchers");
+const voucherDescriptions = require("./../routers/financial/financial-docs/voucher-descriptions");
 //---
 const bankTypes = require("./../routers/financial/treasury/basic-info/bank-types");
 const banks = require("./../routers/financial/treasury/basic-info/banks");
@@ -101,6 +102,7 @@ module.exports = function (app) {
   app.use("/api/financial/ledger/ledgers", ledgers);
   //---
   app.use("/api/financial/docs/vouchers", vouchers);
+  app.use("/api/financial/docs/voucher-descriptions", voucherDescriptions);
   //---
   app.use("/api/financial/treasury/basic/bank-types", bankTypes);
   app.use("/api/financial/treasury/basic/banks", banks);
