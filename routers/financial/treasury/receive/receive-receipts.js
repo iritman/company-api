@@ -214,6 +214,34 @@ router.post("/approve/:receiveID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/undo-approve/:receiveID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.UndoApproveReceiveReceipt ${MemberID}, ${req.params.receiveID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.post("/submit-voucher/:receiveID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.SubmitVoucherReceiveReceipt ${MemberID}, ${req.params.receiveID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
