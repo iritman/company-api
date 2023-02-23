@@ -25,6 +25,10 @@ router.get("/pages/:employee_memberID", auth, async (req, res) => {
           module.Pages = JSON.parse(module.Pages);
         });
       });
+    } else if (key === "Accesses") {
+      result[key].forEach(
+        (access) => (access.Operations = JSON.parse(access.Operations))
+      );
     }
   }
 
