@@ -256,6 +256,23 @@ router.post("/delete-voucher/:receiveID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/view-voucher/:voucherID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.ViewVoucherReceiveReceipt ${MemberID}, ${req.params.voucherID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.Items = JSON.parse(result.Items);
+  result.Logs = JSON.parse(result.Logs);
+
+  res.send(result);
+});
+
 router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
