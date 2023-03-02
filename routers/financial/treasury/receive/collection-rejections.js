@@ -170,6 +170,77 @@ router.post("/approve/:collection_rejection_id", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post(
+  "/undo-approve/:collection_rejection_id",
+  auth,
+  async (req, res) => {
+    const { MemberID } = req.user;
+
+    let result = await selectQuery(
+      `EXEC Financial_TreasuryAPI.UndoApproveCollectionRejection ${MemberID}, ${req.params.collection_rejection_id}`
+    );
+
+    result = result.recordset[0];
+
+    if (result.Error) return res.status(400).send(result);
+
+    res.send(result);
+  }
+);
+
+router.post(
+  "/submit-voucher/:collection_rejection_id",
+  auth,
+  async (req, res) => {
+    const { MemberID } = req.user;
+
+    let result = await selectQuery(
+      `EXEC Financial_TreasuryAPI.SubmitVoucherCollectionRejection ${MemberID}, ${req.params.collection_rejection_id}`
+    );
+
+    result = result.recordset[0];
+
+    if (result.Error) return res.status(400).send(result);
+
+    res.send(result);
+  }
+);
+
+router.delete(
+  "/delete-voucher/:collection_rejection_id",
+  auth,
+  async (req, res) => {
+    const { MemberID } = req.user;
+
+    let result = await selectQuery(
+      `EXEC Financial_TreasuryAPI.DeleteVoucherCollectionRejection ${MemberID}, ${req.params.collection_rejection_id}`
+    );
+
+    result = result.recordset[0];
+
+    if (result.Error) return res.status(400).send(result);
+
+    res.send(result);
+  }
+);
+
+router.get("/view-voucher/:voucherID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.ViewVoucherCollectionRejection ${MemberID}, ${req.params.voucherID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.Items = JSON.parse(result.Items);
+  result.Logs = JSON.parse(result.Logs);
+
+  res.send(result);
+});
+
 router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
