@@ -21,6 +21,20 @@ router.get("/params", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/accesses/:pageID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC FinancialAPI.GetTafsilAccountAccesses ${MemberID}, ${req.params.pageID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.get("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -70,6 +84,23 @@ router.post("/search", auth, async (req, res) => {
 
   if (result.length === 1 && result[0].Error)
     return res.status(400).send(result[0]);
+
+  res.send(result);
+});
+
+router.post("/create", auth, async (req, res) => {
+  const { MemberID } = req.user;
+  const { pageID, tableName, itemID } = req.body;
+
+  let result = await selectQuery(
+    `EXEC FinancialAPI.CreateTafsilAccount ${MemberID}, ${pageID}, N'${tableName}', ${itemID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.TafsilInfo = JSON.parse(result.TafsilInfo);
 
   res.send(result);
 });
