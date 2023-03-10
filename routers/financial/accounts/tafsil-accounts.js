@@ -21,11 +21,11 @@ router.get("/params", auth, async (req, res) => {
   res.send(result);
 });
 
-router.get("/accesses/:pageID", auth, async (req, res) => {
+router.get("/accesses/:pageName", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC FinancialAPI.GetTafsilAccountAccesses ${MemberID}, ${req.params.pageID}`
+    `EXEC FinancialAPI.GetTafsilAccountAccesses ${MemberID}, N'${req.params.pageName}'`
   );
 
   result = result.recordset[0];
@@ -90,10 +90,10 @@ router.post("/search", auth, async (req, res) => {
 
 router.post("/create", auth, async (req, res) => {
   const { MemberID } = req.user;
-  const { pageID, tableName, itemID } = req.body;
+  const { pageName, tableName, itemID } = req.body;
 
   let result = await selectQuery(
-    `EXEC FinancialAPI.CreateTafsilAccount ${MemberID}, ${pageID}, N'${tableName}', ${itemID}`
+    `EXEC FinancialAPI.CreateTafsilAccount ${MemberID}, N'${pageName}', N'${tableName}', ${itemID}`
   );
 
   result = result.recordset[0];
