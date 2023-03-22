@@ -23,6 +23,7 @@
     "msnodesqlv8": "^3.0.1",
     "mssql": "^9.0.1",
     "multer": "^1.4.3",
+    "string-crypto": "^2.0.2",
     "winston": "^3.3.3"
   }
 }
