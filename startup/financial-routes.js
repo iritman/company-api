@@ -55,6 +55,7 @@ const bankHandOvers = require("../routers/financial/treasury/receive/bank-hand-o
 const collectionRejections = require("../routers/financial/treasury/receive/collection-rejections");
 //---
 const collectorAgents = require("../routers/financial/treasury/collector-agent/collector-agents");
+const transferToCollectorAgents = require("../routers/financial/treasury/collector-agent/transfer-to-collector-agents");
 //---
 const funds = require("../routers/financial/treasury/fund/funds");
 //---
@@ -143,6 +144,10 @@ module.exports = function (app) {
   app.use(
     "/api/financial/treasury/collector-agent/collector-agents",
     collectorAgents
+  );
+  app.use(
+    "/api/financial/treasury/collector-agent/transfer-to-collector-agents",
+    transferToCollectorAgents
   );
   //---
   app.use("/api/financial/treasury/fund/funds", funds);
