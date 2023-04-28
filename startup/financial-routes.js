@@ -48,6 +48,7 @@ const standardDescriptions = require("../routers/financial/treasury/basic-info/s
 //---
 const paymentRequests = require("../routers/financial/treasury/pay/payment-requests");
 const paymentOrders = require("../routers/financial/treasury/pay/payment-orders");
+const paymentReceipts = require("../routers/financial/treasury/pay/payment-receipts");
 //---
 const receiveRequests = require("../routers/financial/treasury/receive/receive-requests");
 const receiveReceipts = require("../routers/financial/treasury/receive/receive-receipts");
@@ -132,6 +133,7 @@ module.exports = function (app) {
   //---
   app.use("/api/financial/treasury/pay/payment-requests", paymentRequests);
   app.use("/api/financial/treasury/pay/payment-orders", paymentOrders);
+  app.use("/api/financial/treasury/pay/payment-receipts", paymentReceipts);
   //---
   app.use("/api/financial/treasury/receive/receive-requests", receiveRequests);
   app.use("/api/financial/treasury/receive/receive-receipts", receiveReceipts);
