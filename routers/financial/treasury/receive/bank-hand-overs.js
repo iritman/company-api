@@ -130,7 +130,11 @@ router.post("/item/:itemType", auth, async (req, res) => {
       sp = "";
       break;
   }
-
+  console.log(
+    `EXEC Financial_TreasuryAPI.${sp} ${MemberID}, N'${JSON.stringify(
+      req.body
+    )}'`
+  );
   let result = await selectQuery(
     `EXEC Financial_TreasuryAPI.${sp} ${MemberID}, N'${JSON.stringify(
       req.body
