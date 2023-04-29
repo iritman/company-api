@@ -53,6 +53,39 @@ router.get("/account/:accountID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/refund/from-other/:chequeID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.GetReceiveReceiptRefundFromOtherChequeByID ${MemberID}, ${req.params.chequeID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.get(
+  "/refund/from-other/:cashBoxID/:chequeStatusID/:frontSideAccountID",
+  auth,
+  async (req, res) => {
+    const { MemberID } = req.user;
+    const { cashBoxID, chequeStatusID, frontSideAccountID } = req.params;
+
+    let result = await selectQuery(
+      `EXEC Financial_TreasuryAPI.GetReceiveRefundFromOther_Cheques ${MemberID}, ${cashBoxID}, ${chequeStatusID}, ${frontSideAccountID}`
+    );
+
+    result = result.recordset[0];
+
+    if (result.Error) return res.status(400).send(result);
+
+    res.send(result.Cheques);
+  }
+);
+
 router.post("/accounts", auth, async (req, res) => {
   const { MemberID } = req.user;
   const { searchText } = req.body;
@@ -107,7 +140,7 @@ router.post("/search", auth, async (req, res) => {
     request.Demands = JSON.parse(request.Demands);
     request.Cashes = JSON.parse(request.Cashes);
     request.PaymentNotices = JSON.parse(request.PaymentNotices);
-    request.ReturnFromOthers = JSON.parse(request.ReturnFromOthers);
+    request.RefundFromOtherCheques = JSON.parse(request.RefundFromOtherCheques);
     request.ReturnPayableCheques = JSON.parse(request.ReturnPayableCheques);
     request.ReturnPayableDemands = JSON.parse(request.ReturnPayableDemands);
   });
@@ -134,7 +167,7 @@ router.post("/", auth, async (req, res) => {
   result.Demands = JSON.parse(result.Demands);
   result.Cashes = JSON.parse(result.Cashes);
   result.PaymentNotices = JSON.parse(result.PaymentNotices);
-  result.ReturnFromOthers = JSON.parse(result.ReturnFromOthers);
+  result.RefundFromOtherCheques = JSON.parse(result.RefundFromOtherCheques);
   result.ReturnPayableCheques = JSON.parse(result.ReturnPayableCheques);
   result.ReturnPayableDemands = JSON.parse(result.ReturnPayableDemands);
 
@@ -159,8 +192,8 @@ router.post("/item/:itemType", auth, async (req, res) => {
     case "payment-notice":
       sp = "SaveReceivePaymentNotice";
       break;
-    case "return-from-other":
-      sp = "SaveReceiveReturnFromOther";
+    case "refund-from-other-cheque":
+      sp = "SaveReceiveRefundFromOtherCheque";
       break;
     case "return-payable-cheque":
       sp = "SaveReceiveReturnPayableCheque";
@@ -182,7 +215,6 @@ router.post("/item/:itemType", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
-
   res.send(result);
 });
 
@@ -305,8 +337,8 @@ router.delete("/:itemType/:recordID", auth, async (req, res) => {
     case "payment-notice":
       sp = "DeleteReceivePaymentNotice";
       break;
-    case "return-from-other":
-      sp = "DeleteReceiveReturnFromOther";
+    case "refund-from-other-cheque":
+      sp = "DeleteReceiveRefundFromOtherCheque";
       break;
     case "return-payable-cheque":
       sp = "DeleteReceiveReturnPayableCheque";
@@ -326,7 +358,7 @@ router.delete("/:itemType/:recordID", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
-
+  console.log(result);
   res.send(result);
 });
 
