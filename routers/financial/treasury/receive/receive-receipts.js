@@ -86,6 +86,72 @@ router.get(
   }
 );
 
+router.get("/refund/payed/cheque/:chequeID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.GetReceiveReceiptRefundPayedChequeByID ${MemberID}, ${req.params.chequeID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.get(
+  "/refund/payed/cheque/:cashBoxID/:frontSideAccountID",
+  auth,
+  async (req, res) => {
+    const { MemberID } = req.user;
+    const { cashBoxID, frontSideAccountID } = req.params;
+
+    let result = await selectQuery(
+      `EXEC Financial_TreasuryAPI.GetReceiveRefundPayed_Cheques ${MemberID}, ${cashBoxID},  ${frontSideAccountID}`
+    );
+
+    result = result.recordset[0];
+
+    if (result.Error) return res.status(400).send(result);
+
+    res.send(result.Cheques);
+  }
+);
+
+router.get("/refund/payed/demand/:demandID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.GetReceiveReceiptRefundPayedDemandByID ${MemberID}, ${req.params.demandID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.get(
+  "/refund/payed/demand/:cashBoxID/:frontSideAccountID",
+  auth,
+  async (req, res) => {
+    const { MemberID } = req.user;
+    const { cashBoxID, frontSideAccountID } = req.params;
+
+    let result = await selectQuery(
+      `EXEC Financial_TreasuryAPI.GetReceiveRefundPayed_Demands ${MemberID}, ${cashBoxID},  ${frontSideAccountID}`
+    );
+
+    result = result.recordset[0];
+
+    if (result.Error) return res.status(400).send(result);
+
+    res.send(result.Demands);
+  }
+);
+
 router.post("/accounts", auth, async (req, res) => {
   const { MemberID } = req.user;
   const { searchText } = req.body;
@@ -141,8 +207,8 @@ router.post("/search", auth, async (req, res) => {
     request.Cashes = JSON.parse(request.Cashes);
     request.PaymentNotices = JSON.parse(request.PaymentNotices);
     request.RefundFromOtherCheques = JSON.parse(request.RefundFromOtherCheques);
-    request.ReturnPayableCheques = JSON.parse(request.ReturnPayableCheques);
-    request.ReturnPayableDemands = JSON.parse(request.ReturnPayableDemands);
+    request.RefundPayedCheques = JSON.parse(request.RefundPayedCheques);
+    request.RefundPayedDemands = JSON.parse(request.RefundPayedDemands);
   });
 
   res.send(result);
@@ -168,8 +234,8 @@ router.post("/", auth, async (req, res) => {
   result.Cashes = JSON.parse(result.Cashes);
   result.PaymentNotices = JSON.parse(result.PaymentNotices);
   result.RefundFromOtherCheques = JSON.parse(result.RefundFromOtherCheques);
-  result.ReturnPayableCheques = JSON.parse(result.ReturnPayableCheques);
-  result.ReturnPayableDemands = JSON.parse(result.ReturnPayableDemands);
+  result.RefundPayedCheques = JSON.parse(result.RefundPayedCheques);
+  result.RefundPayedDemands = JSON.parse(result.RefundPayedDemands);
 
   res.send(result);
 });
@@ -195,11 +261,11 @@ router.post("/item/:itemType", auth, async (req, res) => {
     case "refund-from-other-cheque":
       sp = "SaveReceiveRefundFromOtherCheque";
       break;
-    case "return-payable-cheque":
-      sp = "SaveReceiveReturnPayableCheque";
+    case "refund-payed-cheque":
+      sp = "SaveReceiveRefundPayedCheque";
       break;
-    case "return-payable-demand":
-      sp = "SaveReceiveReturnPayableDemand";
+    case "refund-payed-demand":
+      sp = "SaveReceiveRefundPayedDemand";
       break;
     default:
       sp = "";
@@ -340,11 +406,11 @@ router.delete("/:itemType/:recordID", auth, async (req, res) => {
     case "refund-from-other-cheque":
       sp = "DeleteReceiveRefundFromOtherCheque";
       break;
-    case "return-payable-cheque":
-      sp = "DeleteReceiveReturnPayableCheque";
+    case "refund-payed-cheque":
+      sp = "DeleteReceiveRefundPayedCheque";
       break;
-    case "return-payable-demand":
-      sp = "DeleteReceiveReturnPayableDemand";
+    case "refund-payed-demand":
+      sp = "DeleteReceiveRefundPayedDemand";
       break;
     default:
       sp = "";
@@ -358,7 +424,7 @@ router.delete("/:itemType/:recordID", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
-  console.log(result);
+
   res.send(result);
 });
 
