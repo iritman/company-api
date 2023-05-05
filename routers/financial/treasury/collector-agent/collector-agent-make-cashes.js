@@ -62,6 +62,20 @@ router.post("/search", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/cheque/:chequeID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_TreasuryAPI.GetCollectorAgentMakeCashChequeByID ${MemberID}, ${req.params.chequeID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
