@@ -59,6 +59,7 @@ const collectorAgents = require("../routers/financial/treasury/collector-agent/c
 const transferToCollectorAgents = require("../routers/financial/treasury/collector-agent/transfer-to-collector-agents");
 const collectorAgentMakeCashes = require("../routers/financial/treasury/collector-agent/collector-agent-make-cashes");
 const collectorAgentRefunds = require("../routers/financial/treasury/collector-agent/collector-agent-refunds");
+const collectorAgentRejections = require("../routers/financial/treasury/collector-agent/collector-agent-rejections");
 //---
 const funds = require("../routers/financial/treasury/fund/funds");
 //---
@@ -160,6 +161,10 @@ module.exports = function (app) {
   app.use(
     "/api/financial/treasury/collector-agent/collector-agent-refunds",
     collectorAgentRefunds
+  );
+  app.use(
+    "/api/financial/treasury/collector-agent/collector-agent-rejections",
+    collectorAgentRejections
   );
   //---
   app.use("/api/financial/treasury/fund/funds", funds);
