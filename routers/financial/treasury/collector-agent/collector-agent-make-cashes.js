@@ -35,7 +35,7 @@ router.get("/cheques/:agentID", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
-  console.log(result);
+
   result.Cheques = JSON.parse(result.Cheques);
 
   res.send(result);
