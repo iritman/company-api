@@ -7,6 +7,7 @@ const accesses = require("../routers/global/accesses");
 const settingsRoutes = require("./settings-routes");
 const officialRoutes = require("./official-routes");
 const financialRoutes = require("./financial-routes");
+const logisticRoutes = require("./logistic-routes");
 const dashboardRoutes = require("./dashboard-routes");
 //------
 const accountRoutes = require("./account-routes");
@@ -24,6 +25,7 @@ module.exports = function (app) {
   settingsRoutes(app);
   officialRoutes(app);
   financialRoutes(app);
+  logisticRoutes(app);
   dashboardRoutes(app);
   accountRoutes(app);
   //------
