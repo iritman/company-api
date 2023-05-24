@@ -6,6 +6,7 @@ const purchasingAdmins = require("./../routers/logistic/basic-info/purchasing-ad
 const purchasingAgents = require("./../routers/logistic/basic-info/purchasing-agents");
 //---
 const purchaseRequests = require("./../routers/logistic/purchase/purchase-requests");
+const serviceRequests = require("./../routers/logistic/purchase/service-requests");
 //---
 
 module.exports = function (app) {
@@ -20,5 +21,6 @@ module.exports = function (app) {
   app.use("/api/logistic/basic-info/purchasing-agents", purchasingAgents);
   //---
   app.use("/api/logistic/purchase/purchase-requests", purchaseRequests);
+  app.use("/api/logistic/purchase/service-requests", serviceRequests);
   //---
 };
