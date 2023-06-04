@@ -54,6 +54,13 @@ router.get("/item/params", auth, async (req, res) => {
     result[key] = JSON.parse(result[key]);
   }
 
+  result.Choices.forEach((choice) => {
+    if (choice.MeasureUnits) {
+      choice.MeasureUnits = JSON.parse(choice.MeasureUnits);
+    }
+  });
+
+  console.log(result.Choices);
   res.send(result);
 });
 
@@ -113,22 +120,6 @@ router.get("/search/front-side/:accountID", auth, async (req, res) => {
   res.send(result);
 });
 
-// router.post("/accounts", auth, async (req, res) => {
-//   const { MemberID } = req.user;
-//   const { searchText } = req.body;
-
-//   let result = await selectQuery(
-//     `EXEC SupplyAPI.SearchPurchaseRequestFrontSideAccounts ${MemberID}, N'${searchText}'`
-//   );
-
-//   result = result.recordset;
-
-//   if (result.length === 1 && result[0].Error)
-//     return res.status(400).send(result[0]);
-
-//   res.send(result);
-// });
-
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -163,6 +154,7 @@ router.post("/", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  result = JSON.parse(result.Request);
   result.Items = JSON.parse(result.Items);
 
   res.send(result);
