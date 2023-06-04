@@ -7,7 +7,7 @@ router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetServiceRequestsParams ${MemberID}`
+    `EXEC SupplyAPI.GetPurchaseRequestParams ${MemberID}, 2`
   );
 
   result = result.recordset[0];
@@ -25,7 +25,7 @@ router.get("/search/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetServiceRequestSearchParams ${MemberID}`
+    `EXEC SupplyAPI.GetPurchaseRequestSearchParams ${MemberID}, 2`
   );
 
   result = result.recordset[0];
@@ -43,7 +43,7 @@ router.get("/item/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetServiceRequestItemsParams ${MemberID}`
+    `EXEC SupplyAPI.GetPurchaseRequestItemParams ${MemberID}, 2`
   );
 
   result = result.recordset[0];
@@ -54,6 +54,13 @@ router.get("/item/params", auth, async (req, res) => {
     result[key] = JSON.parse(result[key]);
   }
 
+  result.Choices.forEach((choice) => {
+    if (choice.MeasureUnits) {
+      choice.MeasureUnits = JSON.parse(choice.MeasureUnits);
+    }
+  });
+
+  console.log(result.Choices);
   res.send(result);
 });
 
@@ -61,7 +68,7 @@ router.post("/search/members", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC OrgAPI.SearchMembersAsParams ${MemberID}, N'ServiceRequests', N'${req.body.searchText}'`
+    `EXEC OrgAPI.SearchMembersAsParams ${MemberID}, N'PurchaseRequests', N'${req.body.searchText}'`
   );
 
   result = result.recordset;
@@ -75,7 +82,7 @@ router.get("/search/member/:memberID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchMemberByID ${MemberID}, ${req.params.memberID}`
+    `EXEC SupplyAPI.SearchMemberByID ${MemberID}, ${req.params.memberID}`
   );
 
   result = result.recordset;
@@ -89,7 +96,7 @@ router.get("/search/front-side/:typeID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchFrontSideAccounts ${MemberID}, ${req.params.typeID}`
+    `EXEC SupplyAPI.SearchFrontSideAccounts ${MemberID}, ${req.params.typeID}`
   );
 
   result = result.recordset;
@@ -103,7 +110,7 @@ router.get("/search/front-side/:accountID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchFrontSideAccountByID ${MemberID}, ${req.params.accountID}`
+    `EXEC SupplyAPI.SearchFrontSideAccountByID ${MemberID}, ${req.params.accountID}`
   );
 
   result = result.recordset;
@@ -113,27 +120,11 @@ router.get("/search/front-side/:accountID", auth, async (req, res) => {
   res.send(result);
 });
 
-router.post("/accounts", auth, async (req, res) => {
-  const { MemberID } = req.user;
-  const { searchText } = req.body;
-
-  let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchServiceRequestFrontSideAccounts ${MemberID}, N'${searchText}'`
-  );
-
-  result = result.recordset;
-
-  if (result.length === 1 && result[0].Error)
-    return res.status(400).send(result[0]);
-
-  res.send(result);
-});
-
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchServiceRequests ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SearchPurchaseRequests ${MemberID}, 2, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -154,7 +145,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SaveServiceRequest ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SavePurchaseRequest ${MemberID}, 2, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -163,6 +154,7 @@ router.post("/", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  result = JSON.parse(result.Request);
   result.Items = JSON.parse(result.Items);
 
   res.send(result);
@@ -172,7 +164,7 @@ router.post("/item", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SaveServiceRequestItem ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SavePurchaseRequestItem ${MemberID}, 2, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -181,6 +173,8 @@ router.post("/item", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  result.Suppliers = JSON.parse(result.Suppliers);
+
   res.send(result);
 });
 
@@ -188,7 +182,7 @@ router.post("/reject/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.RejectServiceRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.RejectPurchaseRequest ${MemberID}, 2, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -202,7 +196,7 @@ router.post("/approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.ApproveServiceRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.ApprovePurchaseRequest ${MemberID}, 2, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -216,7 +210,7 @@ router.post("/undo-approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.UndoApproveServiceRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.UndoApprovePurchaseRequest ${MemberID}, 2, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -230,7 +224,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeleteServiceRequest ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeletePurchaseRequest ${MemberID}, 2, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
@@ -244,7 +238,7 @@ router.delete("/item/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeleteServiceRequestItem ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeletePurchaseRequestItem ${MemberID}, 2, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
