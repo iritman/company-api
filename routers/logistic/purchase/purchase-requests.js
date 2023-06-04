@@ -7,7 +7,7 @@ router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetPurchaseRequestsParams ${MemberID}`
+    `EXEC SupplyAPI.GetPurchaseRequestParams ${MemberID}, 1`
   );
 
   result = result.recordset[0];
@@ -25,7 +25,7 @@ router.get("/search/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetPurchaseRequestSearchParams ${MemberID}`
+    `EXEC SupplyAPI.GetPurchaseRequestSearchParams ${MemberID}, 1`
   );
 
   result = result.recordset[0];
@@ -43,7 +43,7 @@ router.get("/item/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetPurchaseRequestItemsParams ${MemberID}`
+    `EXEC SupplyAPI.GetPurchaseRequestItemParams ${MemberID}, 1`
   );
 
   result = result.recordset[0];
@@ -75,7 +75,7 @@ router.get("/search/member/:memberID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchMemberByID ${MemberID}, ${req.params.memberID}`
+    `EXEC SupplyAPI.SearchMemberByID ${MemberID}, ${req.params.memberID}`
   );
 
   result = result.recordset;
@@ -89,7 +89,7 @@ router.get("/search/front-side/:typeID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchFrontSideAccounts ${MemberID}, ${req.params.typeID}`
+    `EXEC SupplyAPI.SearchFrontSideAccounts ${MemberID}, ${req.params.typeID}`
   );
 
   result = result.recordset;
@@ -103,7 +103,7 @@ router.get("/search/front-side/:accountID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchFrontSideAccountByID ${MemberID}, ${req.params.accountID}`
+    `EXEC SupplyAPI.SearchFrontSideAccountByID ${MemberID}, ${req.params.accountID}`
   );
 
   result = result.recordset;
@@ -113,27 +113,27 @@ router.get("/search/front-side/:accountID", auth, async (req, res) => {
   res.send(result);
 });
 
-router.post("/accounts", auth, async (req, res) => {
-  const { MemberID } = req.user;
-  const { searchText } = req.body;
+// router.post("/accounts", auth, async (req, res) => {
+//   const { MemberID } = req.user;
+//   const { searchText } = req.body;
 
-  let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchPurchaseRequestFrontSideAccounts ${MemberID}, N'${searchText}'`
-  );
+//   let result = await selectQuery(
+//     `EXEC SupplyAPI.SearchPurchaseRequestFrontSideAccounts ${MemberID}, N'${searchText}'`
+//   );
 
-  result = result.recordset;
+//   result = result.recordset;
 
-  if (result.length === 1 && result[0].Error)
-    return res.status(400).send(result[0]);
+//   if (result.length === 1 && result[0].Error)
+//     return res.status(400).send(result[0]);
 
-  res.send(result);
-});
+//   res.send(result);
+// });
 
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchPurchaseRequests ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SearchPurchaseRequests ${MemberID}, 1, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -154,7 +154,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SavePurchaseRequest ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SavePurchaseRequest ${MemberID}, 1, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -172,7 +172,7 @@ router.post("/item", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SavePurchaseRequestItem ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SavePurchaseRequestItem ${MemberID}, 1, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -181,6 +181,8 @@ router.post("/item", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  result.Suppliers = JSON.parse(result.Suppliers);
+
   res.send(result);
 });
 
@@ -188,7 +190,7 @@ router.post("/reject/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.RejectPurchaseRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.RejectPurchaseRequest ${MemberID}, 1, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -202,7 +204,7 @@ router.post("/approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.ApprovePurchaseRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.ApprovePurchaseRequest ${MemberID}, 1, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -216,7 +218,7 @@ router.post("/undo-approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.UndoApprovePurchaseRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.UndoApprovePurchaseRequest ${MemberID}, 1, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -230,7 +232,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeletePurchaseRequest ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeletePurchaseRequest ${MemberID}, 1, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
@@ -244,7 +246,7 @@ router.delete("/item/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeletePurchaseRequestItem ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeletePurchaseRequestItem ${MemberID}, 1, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
