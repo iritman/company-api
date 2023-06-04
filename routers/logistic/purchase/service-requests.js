@@ -60,7 +60,6 @@ router.get("/item/params", auth, async (req, res) => {
     }
   });
 
-  console.log(result.Choices);
   res.send(result);
 });
 
@@ -136,6 +135,10 @@ router.post("/search", auth, async (req, res) => {
 
   result.forEach((request) => {
     request.Items = JSON.parse(request.Items);
+    request.Items.forEach((itm) => {
+      itm.Suppliers = JSON.parse(itm.Suppliers);
+      itm.SuppliersIDs = JSON.parse(itm.SuppliersIDs);
+    });
   });
 
   res.send(result);
@@ -156,6 +159,10 @@ router.post("/", auth, async (req, res) => {
 
   result = JSON.parse(result.Request);
   result.Items = JSON.parse(result.Items);
+  result.Items.forEach((itm) => {
+    itm.Suppliers = JSON.parse(itm.Suppliers);
+    itm.SuppliersIDs = JSON.parse(itm.SuppliersIDs);
+  });
 
   res.send(result);
 });
@@ -173,6 +180,7 @@ router.post("/item", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  result = JSON.parse(result.SavedItem);
   result.Suppliers = JSON.parse(result.Suppliers);
 
   res.send(result);
