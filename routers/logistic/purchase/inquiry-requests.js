@@ -7,7 +7,7 @@ router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetInquiryRequestsParams ${MemberID}`
+    `EXEC SupplyAPI.GetInquiryRequestsParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -25,7 +25,7 @@ router.get("/search/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetInquiryRequestSearchParams ${MemberID}`
+    `EXEC SupplyAPI.GetInquiryRequestSearchParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -43,7 +43,7 @@ router.get("/item/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetInquiryRequestItemsParams ${MemberID}`
+    `EXEC SupplyAPI.GetInquiryRequestItemsParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -57,66 +57,54 @@ router.get("/item/params", auth, async (req, res) => {
   res.send(result);
 });
 
-router.get("/search/purchases", auth, async (req, res) => {
+router.get("/supplier/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetRegedPurchaseRequestsForInquiry ${MemberID}`
-  );
-
-  result = result.recordset;
-
-  if (result.Error) return res.status(400).send(result);
-
-  result.forEach((r) => (r.Items = JSON.parse(r.Items)));
-
-  res.send(result);
-});
-
-router.get("/search/purchases/:requestID", auth, async (req, res) => {
-  const { MemberID } = req.user;
-
-  let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetRegedPurchaseRequestByIDForInquiry ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.GetInquiryRequestSuppliersParams ${MemberID}`
   );
 
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
 
-  result.Items = JSON.parse(result.Items);
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
 
   res.send(result);
 });
 
-router.get("/search/services", auth, async (req, res) => {
+router.get("/purchase/items", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetRegedServiceRequestsForInquiry ${MemberID}`
+    `EXEC SupplyAPI.GetRegedPurchaseItemsForInquiry ${MemberID}`
   );
 
   result = result.recordset;
 
   if (result.Error) return res.status(400).send(result);
 
-  result.forEach((r) => (r.Items = JSON.parse(r.Items)));
+  result.forEach((i) => {
+    i.Suppliers = JSON.parse(i.Suppliers);
+  });
 
   res.send(result);
 });
 
-router.get("/search/services/:requestID", auth, async (req, res) => {
+router.get("/purchase/item/:itemID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetRegedServiceRequestByIDForInquiry ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.GetRegedPurchaseItemByIDForInquiry ${MemberID}, ${req.params.itemID}`
   );
 
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
 
-  result.Items = JSON.parse(result.Items);
+  result.Suppliers = JSON.parse(result.Suppliers);
 
   res.send(result);
 });
@@ -125,7 +113,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchInquiryRequests ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SearchInquiryRequests ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -137,42 +125,7 @@ router.post("/search", auth, async (req, res) => {
 
   result.forEach((request) => {
     request.Items = JSON.parse(request.Items);
-
-    request.Items.forEach((i) => {
-      i.RefItemInfo = JSON.parse(i.RefItemInfo);
-
-      const {
-        AgentFirstName,
-        AgentLastName,
-        NeedDate,
-        InquiryDeadline,
-        MeasureUnitTitle,
-        SupplierTitle,
-        ProductCode,
-        ProductTitle,
-        ServiceID,
-        ServiceTitle,
-      } = i.RefItemInfo;
-
-      i.AgentFirstName = AgentFirstName;
-      i.AgentLastName = AgentLastName;
-      i.NeedDate = NeedDate;
-      i.InquiryDeadline = InquiryDeadline;
-      i.MeasureUnitTitle = MeasureUnitTitle;
-      i.SupplierTitle = SupplierTitle;
-
-      if (ProductCode) {
-        i.ProductCode = ProductCode;
-        i.ProductTitle = ProductTitle;
-      }
-
-      if (ServiceID) {
-        i.ServiceID = ServiceID;
-        i.ServiceTitle = ServiceTitle;
-      }
-
-      delete i.RefItemInfo;
-    });
+    request.Suppliers = JSON.parse(request.Suppliers);
   });
 
   res.send(result);
@@ -182,7 +135,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SaveInquiryRequest ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SaveInquiryRequest ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -191,7 +144,9 @@ router.post("/", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  result = JSON.parse(result.Request);
   result.Items = JSON.parse(result.Items);
+  result.Suppliers = JSON.parse(result.Suppliers);
 
   res.send(result);
 });
@@ -200,7 +155,7 @@ router.post("/item", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SaveInquiryRequestItem ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SaveInquiryRequestItem ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -208,6 +163,10 @@ router.post("/item", auth, async (req, res) => {
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
 
   res.send(result);
 });
@@ -216,7 +175,7 @@ router.post("/supplier", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SaveInquiryRequestSupplier ${MemberID}, N'${JSON.stringify(
+    `EXEC SupplyAPI.SaveInquiryRequestSupplier ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -225,6 +184,8 @@ router.post("/supplier", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
+  result = JSON.parse(result.Supplier);
+
   res.send(result);
 });
 
@@ -232,7 +193,7 @@ router.post("/reject/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.RejectInquiryRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.RejectInquiryRequest ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -246,7 +207,7 @@ router.post("/approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.ApproveInquiryRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.ApproveInquiryRequest ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -260,7 +221,7 @@ router.post("/undo-approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.UndoApproveInquiryRequest ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.UndoApproveInquiryRequest ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -274,7 +235,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeleteInquiryRequest ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeleteInquiryRequest ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
@@ -288,7 +249,7 @@ router.delete("/item/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeleteInquiryRequestItem ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeleteInquiryRequestItem ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
@@ -302,7 +263,7 @@ router.delete("/supplier/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeleteInquiryRequestSupplier ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeleteInquiryRequestSupplier ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
