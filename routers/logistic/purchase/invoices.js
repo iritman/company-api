@@ -2,14 +2,11 @@ const express = require("express");
 const auth = require("../../../middlewares/auth");
 const router = express.Router();
 const { selectQuery } = require("../../../startup/db");
-const { slashDate } = require("../../../tools/utils");
 
 router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
-  let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetInvoicesParams ${MemberID}`
-  );
+  let result = await selectQuery(`EXEC SupplyAPI.GetInvoiceParams ${MemberID}`);
 
   result = result.recordset[0];
 
@@ -26,7 +23,7 @@ router.get("/search/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetInvoiceSearchParams ${MemberID}`
+    `EXEC SupplyAPI.GetInvoiceSearchParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -40,89 +37,50 @@ router.get("/search/params", auth, async (req, res) => {
   res.send(result);
 });
 
-// router.get("/item/params", auth, async (req, res) => {
-//   const { MemberID } = req.user;
-
-//   let result = await selectQuery(
-//     `EXEC Logistic_PurchaseAPI.GetInvoiceItemsParams ${MemberID}`
-//   );
-
-//   result = result.recordset[0];
-
-//   if (result.Error) return res.status(400).send(result);
-
-//   for (const key in result) {
-//     result[key] = JSON.parse(result[key]);
-//   }
-
-//   res.send(result);
-// });
-
-const formatItem = (item) => {
-  const {
-    RequestDate,
-    ItemCode,
-    ItemTitle,
-    MeasureUnitTitle,
-    PurchaseAgentID,
-    AgentFirstName,
-    AgentLastName,
-  } = item.ItemInfo;
-
-  item.RequestDate = RequestDate;
-  item.ItemCode = ItemCode;
-  item.ItemTitle = ItemTitle;
-  item.MeasureUnitTitle = MeasureUnitTitle;
-  item.PurchaseAgentID = PurchaseAgentID;
-  item.AgentFirstName = AgentFirstName;
-  item.AgentLastName = AgentLastName;
-
-  delete item.ItemInfo;
-
-  return item;
-};
-
-router.get("/search/inquiry/items/:supplierID", auth, async (req, res) => {
+router.get("/item/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetRegedInquiryRequestItemsForInvoice ${MemberID}, ${req.params.supplierID}`
-  );
-
-  result = result.recordset;
-
-  if (result.Error) return res.status(400).send(result);
-
-  result.forEach((r) => {
-    r.ItemInfo = JSON.parse(r.ItemInfo);
-    r = formatItem(r);
-
-    r.ItemInfo = `${r.ItemCode} - ${r.ItemTitle} - ${slashDate(
-      r.InquiryRequestDate
-    )}`;
-  });
-
-  res.send(result);
-});
-
-router.get("/search/inquiry/item/:itemID", auth, async (req, res) => {
-  const { MemberID } = req.user;
-
-  let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.GetRegedInquiryRequestItemByIDForInvoice ${MemberID}, ${req.params.itemID}`
+    `EXEC SupplyAPI.GetInvoiceItemParams ${MemberID}`
   );
 
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
 
-  result.ItemInfo = JSON.parse(result.ItemInfo);
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
 
-  result = formatItem(result);
+  res.send(result);
+});
 
-  result.ItemInfo = `${result.ItemCode} - ${result.ItemTitle} - ${slashDate(
-    result.InquiryRequestDate
-  )}`;
+router.get("/inquiry/items/:supplierID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC SupplyAPI.GetRegedInquiryItemsForInvoice ${MemberID}, ${req.params.supplierID}`
+  );
+
+  result = result.recordset;
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.get("/inquiry/item/:itemID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC SupplyAPI.GetRegedInquiryItemByIDForInvoice ${MemberID}, ${req.params.itemID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.Suppliers = JSON.parse(result.Suppliers);
 
   res.send(result);
 });
@@ -131,9 +89,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SearchInvoices ${MemberID}, N'${JSON.stringify(
-      req.body
-    )}'`
+    `EXEC SupplyAPI.SearchInvoices ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset;
@@ -143,42 +99,6 @@ router.post("/search", auth, async (req, res) => {
 
   result.forEach((request) => {
     request.Items = JSON.parse(request.Items);
-
-    request.Items.forEach((i) => {
-      i.RefItemInfo = JSON.parse(i.RefItemInfo);
-
-      const {
-        AgentFirstName,
-        AgentLastName,
-        NeedDate,
-        InquiryDeadline,
-        MeasureUnitTitle,
-        SupplierTitle,
-        ProductCode,
-        ProductTitle,
-        ServiceID,
-        ServiceTitle,
-      } = i.RefItemInfo;
-
-      i.AgentFirstName = AgentFirstName;
-      i.AgentLastName = AgentLastName;
-      i.NeedDate = NeedDate;
-      i.InquiryDeadline = InquiryDeadline;
-      i.MeasureUnitTitle = MeasureUnitTitle;
-      i.SupplierTitle = SupplierTitle;
-
-      if (ProductCode) {
-        i.ProductCode = ProductCode;
-        i.ProductTitle = ProductTitle;
-      }
-
-      if (ServiceID) {
-        i.ServiceID = ServiceID;
-        i.ServiceTitle = ServiceTitle;
-      }
-
-      delete i.RefItemInfo;
-    });
   });
 
   res.send(result);
@@ -188,15 +108,14 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SaveInvoice ${MemberID}, N'${JSON.stringify(
-      req.body
-    )}'`
+    `EXEC SupplyAPI.SaveInvoice ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
 
+  result = JSON.parse(result.Invoice);
   result.Items = JSON.parse(result.Items);
 
   res.send(result);
@@ -206,14 +125,16 @@ router.post("/item", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.SaveInvoiceItem ${MemberID}, N'${JSON.stringify(
-      req.body
-    )}'`
+    `EXEC SupplyAPI.SaveInvoiceItem ${MemberID}, N'${JSON.stringify(req.body)}'`
   );
 
   result = result.recordset[0];
 
   if (result.Error) return res.status(400).send(result);
+
+  for (const key in result) {
+    result[key] = JSON.parse(result[key]);
+  }
 
   res.send(result);
 });
@@ -222,7 +143,7 @@ router.post("/reject/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.RejectInvoice ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.RejectInvoice ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -236,7 +157,7 @@ router.post("/approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.ApproveInvoice ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.ApproveInvoice ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -250,7 +171,7 @@ router.post("/undo-approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.UndoApproveInvoice ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.UndoApproveInvoice ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -264,7 +185,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeleteInvoice ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeleteInvoice ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
@@ -278,7 +199,7 @@ router.delete("/item/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Logistic_PurchaseAPI.DeleteInvoiceItem ${MemberID}, ${req.params.recordID}`
+    `EXEC SupplyAPI.DeleteInvoiceItem ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
