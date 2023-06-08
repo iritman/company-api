@@ -9,6 +9,7 @@ const purchaseRequests = require("./../routers/logistic/purchase/purchase-reques
 const serviceRequests = require("./../routers/logistic/purchase/service-requests");
 const inquiryRequests = require("./../routers/logistic/purchase/inquiry-requests");
 const invoices = require("./../routers/logistic/purchase/invoices");
+const purchaseCommands = require("./../routers/logistic/purchase/purchase-commands");
 //---
 
 module.exports = function (app) {
@@ -26,5 +27,6 @@ module.exports = function (app) {
   app.use("/api/logistic/purchase/service-requests", serviceRequests);
   app.use("/api/logistic/purchase/inquiry-requests", inquiryRequests);
   app.use("/api/logistic/purchase/invoices", invoices);
+  app.use("/api/logistic/purchase/purchase-commands", purchaseCommands);
   //---
 };
