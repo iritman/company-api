@@ -132,11 +132,7 @@ router.post("/item", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
-  for (const key in result) {
-    result[key] = JSON.parse(result[key]);
-  }
-
-  res.send(result);
+  res.send(result.SavedItem);
 });
 
 router.post("/reject/:requestID", auth, async (req, res) => {
