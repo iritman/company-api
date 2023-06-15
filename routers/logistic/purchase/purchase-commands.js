@@ -143,11 +143,11 @@ router.post("/item", auth, async (req, res) => {
   res.send(result.SavedItem);
 });
 
-router.post("/reject/:requestID", auth, async (req, res) => {
+router.post("/reject/:commandID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC SupplyAPI.RejectPurchaseCommand ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.RejectPurchaseCommand ${MemberID}, ${req.params.commandID}`
   );
 
   result = result.recordset[0];
@@ -157,11 +157,11 @@ router.post("/reject/:requestID", auth, async (req, res) => {
   res.send(result);
 });
 
-router.post("/approve/:requestID", auth, async (req, res) => {
+router.post("/approve/:commandID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC SupplyAPI.ApprovePurchaseCommand ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.ApprovePurchaseCommand ${MemberID}, ${req.params.commandID}`
   );
 
   result = result.recordset[0];
@@ -171,11 +171,11 @@ router.post("/approve/:requestID", auth, async (req, res) => {
   res.send(result);
 });
 
-router.post("/undo-approve/:requestID", auth, async (req, res) => {
+router.post("/undo-approve/:commandID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC SupplyAPI.UndoApprovePurchaseCommand ${MemberID}, ${req.params.requestID}`
+    `EXEC SupplyAPI.UndoApprovePurchaseCommand ${MemberID}, ${req.params.commandID}`
   );
 
   result = result.recordset[0];
