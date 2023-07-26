@@ -179,9 +179,7 @@ router.get("/search/front-side-account/:id", auth, async (req, res) => {
 router.post("/search/products", auth, async (req, res) => {
   const { MemberID } = req.user;
   const { searchText } = req.body;
-  console.log(
-    `EXEC SupplyAPI.SearchDeliveryProducts ${MemberID}, N'${searchText}'`
-  );
+
   let result = await selectQuery(
     `EXEC SupplyAPI.SearchDeliveryProducts ${MemberID}, N'${searchText}'`
   );

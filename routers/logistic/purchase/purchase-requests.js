@@ -146,7 +146,7 @@ router.post("/search", auth, async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
-  console.log(req.body);
+
   let result = await selectQuery(
     `EXEC SupplyAPI.SavePurchaseRequest ${MemberID}, 1, N'${JSON.stringify(
       req.body
