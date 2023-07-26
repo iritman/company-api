@@ -4,6 +4,7 @@ const userMembersDuties = require("./../routers/official/org/user-members-duties
 const userSecurityGuardRegedCards = require("./../routers/official/timex/user-security-guard-reged-cards");
 const userApprovedVacations = require("./../routers/official/timex/user-approved-vacations");
 const userApprovedMissions = require("./../routers/official/timex/user-approved-missions");
+const userApprovedExtraWorks = require("./../routers/official/timex/user-approved-extra-works");
 //---
 const userMyRegedCards = require("./../routers/official/timex/user-my-reged-cards");
 const userMyWorkShifts = require("./../routers/official/timex/user-my-work-shifts");
@@ -87,6 +88,10 @@ module.exports = function (app) {
   );
   app.use("/api/official/timex/user-approved-vacations", userApprovedVacations);
   app.use("/api/official/timex/user-approved-missions", userApprovedMissions);
+  app.use(
+    "/api/official/timex/user-approved-extra-works",
+    userApprovedExtraWorks
+  );
   //---
   app.use("/api/official/timex/user-my-reged-cards", userMyRegedCards);
   app.use("/api/official/timex/user-my-work-shifts", userMyWorkShifts);
