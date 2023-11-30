@@ -7,7 +7,7 @@ router.get("/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.GetProductRequestParams ${MemberID}, 1`
+    `EXEC Financial_StoreOprAPI.GetProductRequestParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -25,7 +25,7 @@ router.get("/search/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.GetProductRequestSearchParams ${MemberID}, 1`
+    `EXEC Financial_StoreOprAPI.GetProductRequestSearchParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -43,7 +43,7 @@ router.get("/item/params", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.GetProductRequestItemParams ${MemberID}, 1`
+    `EXEC Financial_StoreOprAPI.GetProductRequestItemParams ${MemberID}`
   );
 
   result = result.recordset[0];
@@ -123,7 +123,7 @@ router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.SearchProductRequests ${MemberID}, 1, N'${JSON.stringify(
+    `EXEC Financial_StoreOprAPI.SearchProductRequests ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -148,7 +148,7 @@ router.post("/", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.SaveProductRequest ${MemberID}, 1, N'${JSON.stringify(
+    `EXEC Financial_StoreOprAPI.SaveProductRequest ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -171,7 +171,7 @@ router.post("/item", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.SaveProductRequestItem ${MemberID}, 1, N'${JSON.stringify(
+    `EXEC Financial_StoreOprAPI.SaveProductRequestItem ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -190,7 +190,7 @@ router.post("/reject/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.RejectProductRequest ${MemberID}, 1, ${req.params.requestID}`
+    `EXEC Financial_StoreOprAPI.RejectProductRequest ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -204,7 +204,7 @@ router.post("/approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.ApproveProductRequest ${MemberID}, 1, ${req.params.requestID}`
+    `EXEC Financial_StoreOprAPI.ApproveProductRequest ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -218,7 +218,7 @@ router.post("/undo-approve/:requestID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.UndoApproveProductRequest ${MemberID}, 1, ${req.params.requestID}`
+    `EXEC Financial_StoreOprAPI.UndoApproveProductRequest ${MemberID}, ${req.params.requestID}`
   );
 
   result = result.recordset[0];
@@ -232,7 +232,7 @@ router.delete("/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.DeleteProductRequest ${MemberID}, 1, ${req.params.recordID}`
+    `EXEC Financial_StoreOprAPI.DeleteProductRequest ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
@@ -246,7 +246,7 @@ router.delete("/item/:recordID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.DeleteProductRequestItem ${MemberID}, 1, ${req.params.recordID}`
+    `EXEC Financial_StoreOprAPI.DeleteProductRequestItem ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
