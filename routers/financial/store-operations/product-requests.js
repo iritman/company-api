@@ -63,6 +63,22 @@ router.get("/item/params", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/items/:requestID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreOprAPI.GetProductRequestItemsByRequestID ${MemberID}, ${req.params.requestID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result = JSON.parse(result.Items);
+
+  res.send(result);
+});
+
 router.post("/search/members", auth, async (req, res) => {
   const { MemberID } = req.user;
 
