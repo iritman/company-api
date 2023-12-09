@@ -175,10 +175,6 @@ router.post("/", auth, async (req, res) => {
 
   result = JSON.parse(result.Request);
   result.Items = JSON.parse(result.Items);
-  //   result.Items.forEach((itm) => {
-  //     itm.Suppliers = JSON.parse(itm.Suppliers);
-  //     itm.SuppliersIDs = JSON.parse(itm.SuppliersIDs);
-  //   });
 
   res.send(result);
 });
