@@ -79,6 +79,18 @@ router.get("/items/:requestID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/is-returnable/:requestID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `SELECT Financial_StoreOprAPI.IsReturnableProductRequest(${req.params.requestID}) AS IsReturnable`
+  );
+
+  result = result.recordset[0];
+
+  res.send(result);
+});
+
 router.post("/search/members", auth, async (req, res) => {
   const { MemberID } = req.user;
 
