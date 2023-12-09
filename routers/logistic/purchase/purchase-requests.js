@@ -91,7 +91,7 @@ router.get("/search/member/:memberID", auth, async (req, res) => {
   res.send(result);
 });
 
-router.get("/search/front-side/:typeID", auth, async (req, res) => {
+router.get("/search/front-side/type/:typeID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
@@ -118,6 +118,54 @@ router.get("/search/front-side/:accountID", auth, async (req, res) => {
 
   res.send(result);
 });
+
+router.get("/product-request-items", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC SupplyAPI.GetRegedProductRequestItemsForPurchase ${MemberID}`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  res.send(result);
+});
+
+router.get("/product-request-item/:itemID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC SupplyAPI.GetRegedProductRequestItemByIDForPurchase ${MemberID}, ${req.params.itemID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  res.send(result);
+});
+
+router.get(
+  "/product-request-items/not-exists/:productRequestID",
+  auth,
+  async (req, res) => {
+    const { MemberID } = req.user;
+
+    let result = await selectQuery(
+      `EXEC SupplyAPI.GetNotExistsProductsForPurchase ${MemberID}, ${req.params.productRequestID}`
+    );
+
+    result = result.recordset;
+
+    if (result.length === 1 && result[0].Error)
+      return res.status(400).send(result[0]);
+
+    res.send(result);
+  }
+);
 
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
@@ -182,6 +230,7 @@ router.post("/item", auth, async (req, res) => {
 
   result = JSON.parse(result.SavedItem);
   result.Suppliers = JSON.parse(result.Suppliers);
+  result.SuppliersIDs = JSON.parse(result.SuppliersIDs);
 
   res.send(result);
 });
