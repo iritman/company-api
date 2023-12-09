@@ -109,6 +109,27 @@ router.get("/purchase/item/:itemID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get(
+  "/purchase/items-for-inquiry/:purchaseRequestID",
+  auth,
+  async (req, res) => {
+    const { MemberID } = req.user;
+
+    let result = await selectQuery(
+      `EXEC SupplyAPI.GetValidPurchaseItemsForInquiry ${MemberID}, ${req.params.purchaseRequestID}`
+    );
+
+    result = result.recordset;
+
+    if (result.length === 1 && result[0].Error)
+      return res.status(400).send(result[0]);
+
+    result.forEach((row) => (row.Suppliers = JSON.parse(row.Suppliers)));
+
+    res.send(result);
+  }
+);
+
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
