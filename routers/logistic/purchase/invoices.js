@@ -106,6 +106,18 @@ router.get(
   }
 );
 
+router.get("/is-returnable/:invoiceID", auth, async (req, res) => {
+  // const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `SELECT SupplyAPI.IsReturnableInvoice(${req.params.invoiceID}) AS IsReturnable`
+  );
+
+  result = result.recordset[0];
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
