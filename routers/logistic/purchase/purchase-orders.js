@@ -179,6 +179,23 @@ router.post("/search/products", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/command/items-for-order/:commandID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC SupplyAPI.GetValidCommandItemsForOrder ${MemberID}, ${req.params.commandID}`
+  );
+
+  result = result.recordset;
+
+  if (result.length === 1 && result[0].Error)
+    return res.status(400).send(result[0]);
+
+  result.forEach((row) => (row.Suppliers = JSON.parse(row.Suppliers)));
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 

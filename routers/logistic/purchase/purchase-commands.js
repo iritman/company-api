@@ -108,6 +108,18 @@ router.get(
   }
 );
 
+router.get("/is-returnable/:commandID", auth, async (req, res) => {
+  // const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `SELECT SupplyAPI.IsReturnableCommand(${req.params.commandID}) AS IsReturnable`
+  );
+
+  result = result.recordset[0];
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
