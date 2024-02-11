@@ -3,6 +3,7 @@ const auth = require("../routers/auth");
 const filemanager = require("../routers/file-manager");
 const modules = require("../routers/global/modules");
 const accesses = require("../routers/global/accesses");
+const form_manager = require("../routers/global/form-manager");
 //------
 const settingsRoutes = require("./settings-routes");
 const officialRoutes = require("./official-routes");
@@ -21,6 +22,7 @@ module.exports = function (app) {
   app.use("/api/filemanager", filemanager);
   app.use("/api/global/modules", modules);
   app.use("/api/global/accesses", accesses);
+  app.use("/api/global/form", form_manager);
   //------
   settingsRoutes(app);
   officialRoutes(app);
