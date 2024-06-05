@@ -101,6 +101,48 @@ router.get("/search/member/:memberID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.post("/search/products", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.SearchProductsAsParams ${MemberID}, N'ProductRequests', N'${req.body.searchText}'`
+  );
+
+  result = result.recordset;
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.forEach((p) => {
+    p.Features = JSON.parse(p.Features);
+    p.InventoryControlAgents = JSON.parse(p.InventoryControlAgents);
+    p.MeasureConverts = JSON.parse(p.MeasureConverts);
+    p.MeasureUnits = JSON.parse(p.MeasureUnits);
+    p.Stores = JSON.parse(p.Stores);
+  });
+
+  res.send(result);
+});
+
+router.get("/search/product/:productID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreAPI.SearchProductByID ${MemberID}, ${req.params.productID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.Error) return res.status(400).send(result);
+
+  result.Features = JSON.parse(result.Features);
+  result.InventoryControlAgents = JSON.parse(result.InventoryControlAgents);
+  result.MeasureConverts = JSON.parse(result.MeasureConverts);
+  result.MeasureUnits = JSON.parse(result.MeasureUnits);
+  result.Stores = JSON.parse(result.Stores);
+
+  res.send(result);
+});
+
 router.get("/search/front-side/by-type/:typeID", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -129,6 +171,25 @@ router.get("/search/front-side/by-id/:accountID", auth, async (req, res) => {
   res.send(result);
 });
 
+router.get("/next-step/:requestID", auth, async (req, res) => {
+  const { MemberID } = req.user;
+
+  let result = await selectQuery(
+    `EXEC Financial_StoreOprAPI.GetProductRequestNextStep ${MemberID}, ${req.params.requestID}`
+  );
+
+  result = result.recordset[0];
+
+  if (result.NextStep) {
+    result.NextStep = JSON.parse(result.NextStep);
+    for (const key in result.NextStep) {
+      result.NextStep[key] = JSON.parse(result.NextStep[key]);
+    }
+  }
+
+  res.send(result);
+});
+
 router.post("/search", auth, async (req, res) => {
   const { MemberID } = req.user;
 
@@ -145,10 +206,7 @@ router.post("/search", auth, async (req, res) => {
 
   result.forEach((request) => {
     request.Items = JSON.parse(request.Items);
-    // request.Items.forEach((itm) => {
-    //   itm.Suppliers = JSON.parse(itm.Suppliers);
-    //   itm.SuppliersIDs = JSON.parse(itm.SuppliersIDs);
-    // });
+    request.Actions = JSON.parse(request.Actions);
   });
 
   res.send(result);
@@ -173,11 +231,11 @@ router.post("/", auth, async (req, res) => {
   res.send(result);
 });
 
-router.post("/item", auth, async (req, res) => {
+router.post("/feedback", auth, async (req, res) => {
   const { MemberID } = req.user;
 
   let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.SaveProductRequestItem ${MemberID}, N'${JSON.stringify(
+    `EXEC Financial_StoreOprAPI.RegProductRequestFeedback ${MemberID}, N'${JSON.stringify(
       req.body
     )}'`
   );
@@ -186,8 +244,9 @@ router.post("/item", auth, async (req, res) => {
 
   if (result.Error) return res.status(400).send(result);
 
-  result = JSON.parse(result.SavedItem);
-  //   result.Suppliers = JSON.parse(result.Suppliers);
+  result = JSON.parse(result.Request);
+  result.Items = JSON.parse(result.Items);
+  result.Actions = JSON.parse(result.Actions);
 
   res.send(result);
 });
@@ -239,20 +298,6 @@ router.delete("/:recordID", auth, async (req, res) => {
 
   let result = await selectQuery(
     `EXEC Financial_StoreOprAPI.DeleteProductRequest ${MemberID}, ${req.params.recordID}`
-  );
-
-  result = result.recordset[0];
-
-  if (result.Error) return res.status(400).send(result);
-
-  res.send(result);
-});
-
-router.delete("/item/:recordID", auth, async (req, res) => {
-  const { MemberID } = req.user;
-
-  let result = await selectQuery(
-    `EXEC Financial_StoreOprAPI.DeleteProductRequestItem ${MemberID}, ${req.params.recordID}`
   );
 
   result = result.recordset[0];
